@@ -1,0 +1,101 @@
+{
+  "timestamp": "20260707_220656",
+  "object_names": [
+    "blue playdoh"
+  ],
+  "grasp_centers": [
+    [
+      0.5055910606793097,
+      -0.039652024870233595,
+      0.44334569198850826
+    ],
+    [
+      0.5055910606793097,
+      -0.039652024870233595,
+      0.44334569198850826
+    ]
+  ],
+  "grasp_yaws": [
+    -0.06083969277333291,
+    1.509960307226667
+  ],
+  "grasp_widths": [
+    0.04,
+    0.04
+  ],
+  "final_width": 0.04,
+  "mpm": {
+    "final_points_path": "rollout_00_final_points.npy",
+    "bbox_min": [
+      0.48219963908195496,
+      -0.06585276126861572,
+      0.15030913054943085
+    ],
+    "bbox_max": [
+      0.5308607220649719,
+      -0.0157545804977417,
+      0.18176043033599854
+    ],
+    "bbox_size": [
+      0.04866108298301697,
+      0.05009818077087402,
+      0.03145129978656769
+    ],
+    "centroid": [
+      0.5069154905080795,
+      -0.039662786495685574,
+      0.16317403413554032
+    ],
+    "num_grasps": 2
+  },
+  "snapshots": [
+    {
+      "waypoint_index": 0,
+      "gripper": {
+        "position": [
+          0.5055910606793097,
+          -0.039652024870233595,
+          0.44334569198850826
+        ],
+        "width": 0.15
+      },
+      "objects": {
+        "blue playdoh": {
+          "position": [
+            0.5056050867892812,
+            -0.039574690716308,
+            0.16138790690388014
+          ]
+        }
+      },
+      "screenshot": "rollout_00_0.png"
+    },
+    {
+      "waypoint_index": 1,
+      "gripper": {
+        "position": [
+          0.5055910606793097,
+          -0.039652024870233595,
+          0.44334569198850826
+        ],
+        "width": 0.04
+      },
+      "objects": {
+        "blue playdoh": {
+          "position": [
+            0.5069154905080795,
+            -0.039662786495685574,
+            0.16317403413554032
+          ]
+        }
+      },
+      "screenshot": "rollout_00_1.png"
+    }
+  ],
+  "verdict": {
+    "success": true,
+    "confidence": 1.0,
+    "reason": "The final shape is an excellent square block, with nearly equal horizontal dimensions (dx=0.049m, dy=0.050m). The ratio is well within the 30% tolerance.",
+    "remaining": ""
+  }
+}

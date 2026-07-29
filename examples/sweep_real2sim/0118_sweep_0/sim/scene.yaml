@@ -1,0 +1,20 @@
+# Sweep (black bean pile -> purple tape cage) MPM scene — minimal schema. Robot-frame
+# assets recorded on the real Franka rig (trial 0118_sweep_0). Paths relative; camera1
+# calibration is the 0103 registry profile (see the camera: note below).
+# The beans start OUTSIDE the target cage (0% coverage)
+# — the task is to sweep them in, scored by the measured coverage gate. The MPM centre
+# is computed live from the cloud, so no init_mpm_center is stored; init_gripper_pose
+# was dead (the pusher sweeps from initial_ee_pose).
+object_name: black bean pile
+raw_pcd_path: beans_mpm_points.npy      # (N,3) bean particle cloud, robot frame
+bg_pcd_path: target_region.ply          # the purple-tape target region (coverage gate)
+initial_ee_pose:                        # 4x4 world<-EE; the pusher sweeps from this pose
+- [0.005971876438707113, 0.9999781847000122, -0.00280981557443738, 0.4680647850036621]
+- [0.9995164275169373, -0.005883322563022375, 0.03053360804915428, -0.24798661470413208]
+- [0.03051641210913658, -0.0029907997231930494, -0.9995297789573669, 0.4345344305038452]
+- [0.0, 0.0, 0.0, 1.0]
+# 0103 (Jan 3), NOT 1026: this trial was captured Jan 18, and rebuilding from the raw
+# capture shows 1026 is ~6-7 cm off along z for this session while 0103 reproduces the
+# committed cloud to <0.5 cm (the original mask-centroid profile pick was z-blind).
+camera: {profile: "0103", cam: 1}  # calibration from assets/calibration/0103
+material: {E: 4000.0, nu: 0.25, yield_stress: 400.0, density: 700.0, softness: "very_soft", confidence: 1.0, source: "vlm"}

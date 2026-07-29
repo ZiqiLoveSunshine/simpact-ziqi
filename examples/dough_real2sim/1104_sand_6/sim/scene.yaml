@@ -1,0 +1,14 @@
+# Dough (blue playdoh) MPM scene — minimal schema. Robot-frame assets recorded on the
+# real Franka rig (trial 1104_sand_6). Paths relative; camera1 calibration is the 1026
+# registry profile (4.3px mask-centroid match to camera1_rgb.png).
+# The MPM centre is computed live from the cloud (context.py), so no init_mpm_center
+# is stored; init_gripper_pose was dead (the rollout applies the plan to initial_ee_pose).
+object_name: blue playdoh
+raw_pcd_path: mpm_points.npy          # (N,3) MPM particle cloud, robot frame
+initial_ee_pose:                      # 4x4 world<-EE; the rollout applies the plan to THIS
+- [0.9960078087329891, -0.06190584567812696, 0.06431234039292233, 0.5513910606793097]
+- [-0.06067168566738129, -0.9979374395038154, -0.02097091274500147, -0.057552024870233594]
+- [0.06547791438833225, 0.016985254749426613, -0.9977094485329016, 0.44334569198850826]
+- [0.0, 0.0, 0.0, 1.0]
+camera: {profile: "1026", cam: 1}  # calibration from assets/calibration/1026
+material: {E: 8000.0, nu: 0.45, yield_stress: 1500.0, density: 1200.0, softness: "soft", confidence: 0.9, source: "vlm"}

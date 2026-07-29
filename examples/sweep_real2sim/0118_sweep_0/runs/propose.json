@@ -1,0 +1,81 @@
+{
+  "action_proposals": [
+    {
+      "description": "A direct, one-stage push. The robot aligns behind the beans, descends, and pushes the entire pile into the target region in a single, continuous motion.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": -0.004,
+          "delta_y": 0.108,
+          "reasoning": "Move the end effector from its initial position to a starting point directly behind the bean pile, preparing for the push. The target x is the bean pile's x, and the target y is slightly behind the pile."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.29,
+          "reasoning": "Lower the end effector vertically to bring the pusher's bottom edge just above the table surface, ensuring it will contact the full height of the bean pile."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0,
+          "delta_y": 0.21,
+          "reasoning": "Execute the main push, moving the bean pile from its current location into the center of the taped target region in one smooth motion."
+        }
+      ]
+    },
+    {
+      "description": "A two-stage push for better control. The robot pushes the beans to the edge of the target, then performs a second, smaller push to move them securely into the center.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": -0.004,
+          "delta_y": 0.108,
+          "reasoning": "Move the end effector to align with the bean pile's x-coordinate and position it just behind the pile in the y-direction."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.29,
+          "reasoning": "Lower the pusher to the correct height for sweeping, just above the table, to engage with the beans effectively."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0,
+          "delta_y": 0.15,
+          "reasoning": "Perform the first push, moving the beans from their starting point to the near edge of the blue taped target area."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0,
+          "delta_y": 0.06,
+          "reasoning": "Perform the second, shorter push to move the beans from the edge to the center of the target region, ensuring they are all contained within the tape."
+        }
+      ]
+    },
+    {
+      "description": "A precision-oriented plan. The robot first makes a fine rotational adjustment to ensure the pusher face is perfectly square to the push direction before aligning and executing a direct push.",
+      "action_sequence": [
+        {
+          "type": "ROTATE",
+          "delta_yaw": 0.006,
+          "reasoning": "Perform a small yaw rotation to perfectly align the pusher's flat face perpendicular to the y-axis, ensuring an even push as requested by the instruction."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": -0.004,
+          "delta_y": 0.108,
+          "reasoning": "After correcting the angle, move the end effector into position behind the bean pile, maintaining the new orientation."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.29,
+          "reasoning": "Lower the end effector to the table surface to prepare for sweeping the beans."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0,
+          "delta_y": 0.21,
+          "reasoning": "Push the beans straight forward into the target region with the precisely aligned pusher face."
+        }
+      ]
+    }
+  ]
+}

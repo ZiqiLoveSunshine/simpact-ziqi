@@ -1,0 +1,19 @@
+# Reference bands for VLM material-ID (Phase 2): softness class -> effective-MPM ranges.
+# Single source of truth for both the anchored prompt and the clamp-to-bands validator.
+# These are SIMULATION parameters (solver-stable / visually plausible), NOT real-world
+# engineering constants. See docs/DEFORMABLE_INTEGRATION.md §15.
+E:            # Young's modulus (Pa) — resistance to deformation
+  very_soft:   [2000, 6000]     # loose wet sand, fresh putty
+  soft:        [5000, 12000]    # play-dough, moist clay, bean pile
+  medium_firm: [12000, 25000]   # stiff clay, packed granular
+  stiff:       [25000, 60000]   # dense / compacted
+yield_stress:  # Pa — lower = flows / permanently deforms more easily
+  flows_easily: [200, 800]      # loose granular
+  moderate:     [800, 2500]     # play-dough
+  cohesive:     [2500, 6000]    # holds its shape
+nu:            # Poisson's ratio
+  granular:     [0.20, 0.30]    # loose / compressible
+  cohesive:     [0.40, 0.45]    # nearly-incompressible soft solid
+density:       # kg/m^3
+  dough:        [1000, 1400]
+  granular:     [500, 900]

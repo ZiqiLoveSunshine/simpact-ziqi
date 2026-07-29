@@ -1,0 +1,136 @@
+{
+  "action_proposals": [
+    {
+      "description": "Squeeze the dough first along the Y-axis, then rotate 90 degrees and squeeze along the X-axis. Both squeezes are centered on the dough.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": -0.0458,
+          "delta_y": 0.0179,
+          "reasoning": "Move the gripper from its initial position to a location directly above the center of the blue playdoh."
+        },
+        {
+          "type": "ROTATE",
+          "delta_yaw": 0.0608,
+          "reasoning": "Correct the initial small angle of the gripper to perfectly align its jaws parallel to the X-axis for a squeeze along the Y-axis."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.1863,
+          "reasoning": "Lower the gripper to the specified pre-grasp height of z=0.257m."
+        },
+        {
+          "type": "GRASP",
+          "grasp_width": 0.02,
+          "reasoning": "Perform the first compression on the dough along the Y-axis."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Open the gripper to release the dough after the first squeeze."
+        },
+        {
+          "type": "ROTATE",
+          "delta_yaw": 1.5708,
+          "reasoning": "Rotate the gripper 90 degrees to prepare for the second, perpendicular squeeze along the X-axis."
+        },
+        {
+          "type": "GRASP",
+          "grasp_width": 0.02,
+          "reasoning": "Perform the second compression on the dough along the X-axis to form a block shape."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Release the final shaped dough."
+        }
+      ]
+    },
+    {
+      "description": "Squeeze the dough first along the X-axis, then rotate -90 degrees and squeeze along the Y-axis. The grasp is slightly off-center for a varied result.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": -0.0358,
+          "delta_y": 0.0179,
+          "reasoning": "Move the gripper to a position slightly off-center from the dough along the x-axis to introduce variation."
+        },
+        {
+          "type": "ROTATE",
+          "delta_yaw": 1.6316,
+          "reasoning": "Rotate the gripper by approximately 90 degrees to align its jaws parallel to the Y-axis for the first squeeze along the X-axis."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.1863,
+          "reasoning": "Lower the gripper to the specified pre-grasp height of z=0.257m."
+        },
+        {
+          "type": "GRASP",
+          "grasp_width": 0.03,
+          "reasoning": "Perform the first compression on the dough along the X-axis. A slightly wider grasp width is used for diversity."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Open the gripper to release the dough after the first squeeze."
+        },
+        {
+          "type": "ROTATE",
+          "delta_yaw": -1.5708,
+          "reasoning": "Rotate the gripper -90 degrees to prepare for the second, perpendicular squeeze along the Y-axis."
+        },
+        {
+          "type": "GRASP",
+          "grasp_width": 0.03,
+          "reasoning": "Perform the second compression on the dough along the Y-axis to form a block shape."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Release the final shaped dough."
+        }
+      ]
+    },
+    {
+      "description": "Shape the dough by squeezing it along two perpendicular diagonal axes (45 and 135 degrees).",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": -0.0458,
+          "delta_y": 0.0179,
+          "reasoning": "Move the gripper from its initial position to a location directly above the center of the blue playdoh."
+        },
+        {
+          "type": "ROTATE",
+          "delta_yaw": 0.8462,
+          "reasoning": "Rotate the gripper to a 45-degree angle relative to the world axes for the first diagonal squeeze."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.1863,
+          "reasoning": "Lower the gripper to the specified pre-grasp height of z=0.257m."
+        },
+        {
+          "type": "GRASP",
+          "grasp_width": 0.025,
+          "reasoning": "Perform the first compression on the dough along a 45-degree diagonal."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Open the gripper to release the dough after the first squeeze."
+        },
+        {
+          "type": "ROTATE",
+          "delta_yaw": 1.5708,
+          "reasoning": "Rotate the gripper 90 degrees to prepare for the second squeeze along the perpendicular diagonal (135 degrees)."
+        },
+        {
+          "type": "GRASP",
+          "grasp_width": 0.025,
+          "reasoning": "Perform the second compression on the dough along the 135-degree diagonal to form a block shape."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Release the final shaped dough."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+name: '1026'
+date: '2024-10-26'
+note: rope / dough / sweep capture sessions (camera1); cam1->robot = optimized_transform1_1026
+cameras:
+  cam1:
+    image_size:
+    - 640
+    - 480

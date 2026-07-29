@@ -1,0 +1,16 @@
+
+{ee_pose}
+
+{object_poses}
+
+position of object refers to its **geometric average center** 
+
+--- World Coordinate System ---
++ x: leftward
++ y: forward, or into the image
++ z: upward
+
+
+
+--- Critical Rules for this Task ---
+1. For this particular task, **ONLY** use the primitives **"PUSH", "LIFT", "DESCEND"**.

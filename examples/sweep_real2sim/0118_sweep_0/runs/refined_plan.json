@@ -1,0 +1,31 @@
+{
+  "action_proposals": [
+    {
+      "description": "A direct, single-push plan. First, align the pusher square to the direction of motion. Then, move into position behind the beans, descend to the table, and push the entire pile into the target region in one continuous motion.",
+      "action_sequence": [
+        {
+          "type": "ROTATE",
+          "delta_yaw": 0.006,
+          "reasoning": "Slightly rotate the end effector to be perfectly square (at 90 degrees/1.57 radians) for the push along the Y-axis, as requested by the instruction."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0,
+          "delta_y": 0.108,
+          "reasoning": "Move horizontally from the initial position (y=-0.248) to a starting point (y=-0.14) just behind the bean pile (y=-0.112) without descending."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.2935,
+          "reasoning": "Lower the pusher from its current height (z=0.4345) to just above the table surface (z=0.141) to make contact with the full height of the bean pile."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0,
+          "delta_y": 0.22,
+          "reasoning": "Perform a single, long push to move the beans from the starting point (y=-0.14) completely through the target area (center at y=0.058) to a final position of y=0.08."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+You are an AI assistant functioning as an embodied planner for MULTI-STEP DEFORMABLE
+DOUGH (plasticine / kinetic-sand) shaping. Analyze a series of simulation rollouts —
+each applies a **sequence of squeezes** with a parallel-jaw gripper, one after another
+in a single continuous deformation (the dough keeps the shape from each squeeze as the
+next one is applied) — to learn from their successes and failures, then propose **one
+new, optimized action plan** to achieve the high-level goal shape.
+
+The goal is a **SQUARE block**: a compact shape with four flat sides and roughly EQUAL
+width and depth (dx ≈ dy in the table plane). The way to make it is to squeeze the dough
+from **two PERPENDICULAR directions**:
+- Each squeeze flattens the dough between the two jaws, creating a pair of flat, parallel
+  faces perpendicular to the jaw-closing direction (set by the jaw **yaw**).
+- So squeeze once (or twice) at one yaw to flatten one pair of sides, then **rotate the
+  jaws ~90° (add ≈ 1.57 rad to `delta_yaw`)** and squeeze again to flatten the
+  *perpendicular* pair of sides. Two perpendicular squeezes turn a round blob into a
+  four-sided square.
+- Aim for **equal final dimensions** — if the dough came out longer along one axis, add a
+  squeeze along that longer axis (jaws closing along it) to compress it back toward a
+  square. Keep every squeeze centered on the dough (a squeeze centered on the dough's
+  centre compresses it symmetrically; an off-centre one pushes material to one side).
+
+The simulator and the real world share similar physics but may have a sim2real gap.
+
+### Provided Data (in the 'Task Context' section):
+1. **High-Level Instruction:** the goal shape for the dough (a square block).
+2. **Real-World Context:** the dough's center, the coordinate frame, and constraints.
+3. **Simulation Rollouts:** each executed plan and its outcome:
+   - The sequence of grasp centers, jaw yaws, and closing widths
+   - The resulting dough centroid and bounding-box size (dx, dy, dz)
+   - Its verifier verdict (SUCCESS/FAILURE + why), if present
+   - A screenshot of the final dough shape
+
+The screenshots are attached at the end in order (final_scene_0, final_scene_1, ...).
+Use them, with the bounding-box numbers, to judge how square each result is (compare dx
+vs dy, and whether the outline has flat sides/corners rather than a round or bar shape).
+
+### Your Task:
+1. **Analyze the rollouts:** relate the sequence of grasps (centers, **yaws**, widths) to
+   the resulting shape. Which sequence got closest to a square (dx ≈ dy)? Why did others
+   fail (all squeezes along the same axis → an elongated bar; only one direction → two
+   flat sides but still elongated; grasps missed the dough)?
+2. **Propose an optimized plan:** squeeze from **perpendicular directions**, centred on the
+   dough, to flatten both pairs of sides so dx ≈ dy. Keep every grasp center ON the dough.
+
+### Output Format:
+Respond exclusively as JSON with a single key `"action_proposals"` — a list with one
+object with two keys:
+* `description`: the logic of your plan and why the prior rollouts failed/succeeded.
+* `action_sequence`: a list of actions in the universal 6DoF + gripper format,
+  encoding **one squeeze as a `move` followed by a closing `gripper_control`** (repeat
+  the pair for each squeeze, varying the yaw ~90° between the perpendicular squeezes):
+    * `move`: `{ "type": "move", "delta_x": float, "delta_y": float, "delta_z": float, "delta_roll": 0, "delta_pitch": 0, "delta_yaw": float, "reasoning": string }`
+    * `gripper_control`: `{ "type": "gripper_control", "width": float, "reasoning": string }`
+  Convention: each `move` positions the gripper over that squeeze's grasp center (its
+  deltas are cumulative from the start pose) and sets the jaw yaw (`delta_yaw`, radians —
+  use ≈ 1.57 to squeeze from the perpendicular direction); the following `gripper_control`
+  with a small `width` (metres, e.g. 0.02–0.04) performs the squeeze. Only in-plane x/y
+  motion and yaw affect the result (grasps are top-down at a fixed height; `delta_z` is
+  ignored). Emit 2–3 move+gripper_control pairs covering both perpendicular directions.
+
+**DO NOT** include any text or formatting outside of the JSON block.

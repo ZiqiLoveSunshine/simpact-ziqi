@@ -1,0 +1,120 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "simpact"
+version = "0.1.0"
+description = "SIMPACT: Simulation-Enabled Action Planning using Vision-Language Models (CVPR 2026) — official implementation"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "torch==2.9.0",
+    "h5py",
+    "python-dotenv",
+]
+
+[project.optional-dependencies]
+mpm = [
+    # 1.10.0 matches the working sam3d-objects env; 1.11+ removed the
+    # `import warp.torch` submodule that mpm/warp_utils.py relies on.
+    "warp-lang==1.10.0",
+]
+generator = [
+    "google-genai",
+]
+arap = [
+    "open3d",
+    "pypose",
+    "scipy",
+    "scikit-learn",
+    "trimesh",
+    "matplotlib",
+]
+real2sim = [
+    "mujoco",
+    "coacd",
+    "klampt",
+    "opencv-python",
+    "trimesh",
+    "open3d",
+    "scipy",
+    "pyyaml",
+    "dacite",
+    "pymeshlab",
+    "pycocotools",
+]
+# SAM-3D (image->3D, mesh-only path) — wheel-installable deps only. Versions
+# mirror the proven `sam3d-objects` env (torch 2.9+cu128 / py3.11 / numpy 2.x).
+# Source/no-wheel deps (diso, the editable sam3d_objects package, and
+# FoundationPose's nvdiffrast / mycuda / mycpp) are NOT here — they need
+# `--no-build-isolation` so the build sees torch; see scripts/setup_rigid_env.sh.
+# Mesh-only: kaolin / gsplat / xformers / flash_attn / bpy are intentionally omitted.
+sam3d = [
+    "spconv-cu121==2.3.8",
+    "timm==1.0.22",
+    "einops",
+    "einops-exts==0.0.4",
+    "huggingface-hub",
+    "safetensors",
+    "scikit-image",
+    "omegaconf",
+    "hydra-core",
+    "lightning",
+    "torchmetrics",
+    "easydict",
+    "loguru",
+    "igraph",
+    "pymeshfix",
+    "roma",
+    "point-cloud-utils",
+    "trimesh",
+    # surfaced by the import chain of the core mesh pipeline
+    # (sam3d_objects.pipeline.inference_pipeline_pointmap):
+    "optree",
+    "astor",
+    "gsplat",     # imported at module load even on the mesh path (decoders co-load)
+    "xatlas",
+    "pyvista",
+]
+# Grounded-SAM-2 (open-vocab segmentation from a language prompt, stage 2).
+# GroundingDINO comes from `transformers` (HF "IDEA-Research/grounding-dino-tiny")
+# and SAM2 + its configs from the `sam2` wheel — so NO Grounded-SAM-2 repo clone
+# is needed. `sam2` itself builds from sdist (no wheel for this torch) and lives in
+# scripts/setup_rigid_env.sh, not here. NOTE: transformers 5.x renamed
+# post_process_grounded_object_detection's `box_threshold`->`threshold` and moved
+# string labels to `text_labels` — the adapter targets the 5.x API.
+gsam2 = [
+    "transformers",
+    "supervision",
+    "pycocotools",
+]
+# The rigid perception pipeline in ONE uv env: real2sim + SAM-3D + Grounded-SAM-2
+# (+ FoundationPose & sam2 via the setup script). Deliberately excludes `mpm` —
+# FoundationPose/rigid needs no warp, so the warp-lang 1.0.2 vs 1.10.0 conflict
+# simply never arises.
+rigid = [
+    "simpact[real2sim,sam3d,gsam2]",
+]
+dev = [
+    "simpact[mpm,generator,arap,real2sim]",
+    "pytest",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["simpact*"]
+
+# --- uv configuration ---------------------------------------------------------
+# torch is pinned to 2.9.0 on PyTorch's CUDA 12.8 (cu128) index. This matches the
+# working `sam3d-objects` env and, critically, the RTX 5090 (Blackwell, sm_120),
+# which has NO kernels in cu118 builds (would crash at runtime). uv must be told
+# to use the cu128 index or it resolves a default PyPI wheel. cu128 wheels are
+# linux-only.
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu128" }

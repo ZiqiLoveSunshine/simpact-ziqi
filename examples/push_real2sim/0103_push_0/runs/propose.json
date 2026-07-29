@@ -1,0 +1,109 @@
+{
+  "action_proposals": [
+    {
+      "description": "Directly push the white carton forward to align with the blue carton by making contact at its vertical center.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": -0.052,
+          "delta_y": 0.046,
+          "reasoning": "Move the gripper from its initial position to be directly behind the white carton, aligning the x-axis for a straight push."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.059,
+          "reasoning": "Lower the gripper to align with the vertical center of the white carton (z=0.1922 m) to ensure a stable and effective push."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0,
+          "delta_y": 0.05,
+          "reasoning": "Move forward to make gentle and firm contact with the back of the white carton before initiating the main push."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0,
+          "delta_y": 0.171,
+          "reasoning": "Push the white carton forward until its depth (y-coordinate) matches that of the blue carton."
+        },
+        {
+          "type": "LIFT",
+          "delta_z": 0.1,
+          "reasoning": "Lift the gripper vertically to clear the carton and complete the action without disturbing the final arrangement."
+        }
+      ]
+    },
+    {
+      "description": "Push the white carton from a lower contact point to maximize stability and prevent tipping.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": -0.052,
+          "delta_y": 0.046,
+          "reasoning": "Move the gripper from its initial position to be directly behind the white carton, aligning the x-axis for a straight push."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.131,
+          "reasoning": "Lower the gripper to a point significantly below the carton's center of mass to provide a highly stable push and minimize the risk of tipping."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0,
+          "delta_y": 0.05,
+          "reasoning": "Move forward to make gentle and firm contact with the back of the white carton before initiating the main push."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0,
+          "delta_y": 0.171,
+          "reasoning": "Push the white carton forward until its depth (y-coordinate) matches that of the blue carton."
+        },
+        {
+          "type": "LIFT",
+          "delta_z": 0.15,
+          "reasoning": "Lift the gripper vertically by a larger amount to safely clear the carton from the lower starting height."
+        }
+      ]
+    },
+    {
+      "description": "Push the white carton forward in two distinct stages for a more controlled and precise final placement.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": -0.052,
+          "delta_y": 0.046,
+          "reasoning": "Move the gripper from its initial position to be directly behind the white carton, aligning the x-axis for a straight push."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.059,
+          "reasoning": "Lower the gripper to align with the vertical center of the white carton for a stable push."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0,
+          "delta_y": 0.05,
+          "reasoning": "Move forward to make gentle contact with the back of the white carton."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0,
+          "delta_y": 0.086,
+          "reasoning": "Execute the first half of the push. A two-stage push can offer better control and prevent the carton from rotating or tipping."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0,
+          "delta_y": 0.085,
+          "reasoning": "Execute the second half of the push to complete the movement and precisely align the white carton with the blue carton."
+        },
+        {
+          "type": "LIFT",
+          "delta_z": 0.1,
+          "reasoning": "Lift the gripper vertically to clear the carton and complete the action without disturbing the final arrangement."
+        }
+      ]
+    }
+  ]
+}

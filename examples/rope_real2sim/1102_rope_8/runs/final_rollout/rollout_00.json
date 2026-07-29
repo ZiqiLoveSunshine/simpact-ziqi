@@ -1,0 +1,64 @@
+{
+  "timestamp": "20260726_172937",
+  "object_names": [
+    "rope"
+  ],
+  "grasp_point": [
+    0.5105541669446142,
+    -0.12886082861838133,
+    0.15251914872354377
+  ],
+  "place_point": [
+    0.4099541669446142,
+    0.050039171381618675,
+    0.15251914872354377
+  ],
+  "snapshots": [
+    {
+      "waypoint_index": 0,
+      "gripper": {
+        "position": [
+          0.5105541669446142,
+          -0.12886082861838133,
+          0.15251914872354377
+        ]
+      },
+      "objects": {
+        "rope": {
+          "position": [
+            0.484038459000676,
+            0.08333752926856884,
+            0.15006646033879634
+          ]
+        }
+      },
+      "screenshot": "rollout_00_0.png"
+    },
+    {
+      "waypoint_index": 1,
+      "gripper": {
+        "position": [
+          0.4099541669446142,
+          0.050039171381618675,
+          0.15251914872354377
+        ]
+      },
+      "objects": {
+        "rope": {
+          "position": [
+            0.462030998399773,
+            0.16378457587791018,
+            0.14866815061802777
+          ]
+        }
+      },
+      "screenshot": "rollout_00_1.png"
+    }
+  ],
+  "verdict": {
+    "success": true,
+    "confidence": 0.9,
+    "reason": "The rope was successfully formed into a U-shaped curve. The final shape has a single, deep bend and meets the instruction's criteria.",
+    "remaining": ""
+  }
+}

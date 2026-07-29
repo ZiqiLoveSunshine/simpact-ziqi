@@ -1,0 +1,19 @@
+
+{ee_pose}
+
+{object_poses}
+
+--- World Coordinate System ---
++x: out of screen, or downwards in image
++y: rightward
++z: upward
+
+--- Failure cases to avoid ---
+1. One end of the dough is thicker than the other side
+
+--- Critical Rules for this Task ---
+1. For this particular task, **ONLY** use the primitives **"PUSH", "ROTATE", "DESCEND", "GRASP", "RELEASE"**
+2. The robot end effector should **first use `PUSH` to move to a position above the target grasp point**. 
+3. The robot should consider diverse proposals where the initial grasp center and rotation angle vary in a reasonable range. 
+4. Next the robot end effector should `DESCEND` to the height of 0.257 just above the table. 
+5. The robot may `GRASP` the sand at most **THREE** times.

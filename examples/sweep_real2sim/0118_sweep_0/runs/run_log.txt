@@ -1,0 +1,25 @@
+
+== 1. propose (VLM) ==
+  proposal 0: ROTATE+PUSH+DESCEND+PUSH — A direct, single-push plan. First, align the pusher squ
+  proposal 1: ROTATE+PUSH+DESCEND+PUSH+PUSH — A staged, two-part push plan. After aligning and descen
+  proposal 2: ROTATE+PUSH+DESCEND+PUSH+DESCEND+PUSH — A two-height push plan. Perform a first push at a sligh
+
+== 2. rollout candidates (MPM sweep) ==
+    rollout 0: 3 segment(s), centroid [0.464, 0.094, 0.146]
+    rollout 1: 4 segment(s), centroid [0.464, 0.095, 0.147]
+    rollout 2: 5 segment(s), centroid [0.464, 0.094, 0.147]
+
+== 3. optimize loop (verify[+coverage] <-> regress, max_iters=3) ==
+  [candidate 0] verify -> SUCCESS (conf 1.00): [coverage 100% of material inside target (≥ 50% goal)] The entire pile of beans was successfully swept as a coherent mass into the target region.
+
+== loop result: SOLVED after 0 regress iteration(s) ==
+    ROTATE           delta_yaw=0.006
+    PUSH             delta_x=0.0 delta_y=0.108
+    DESCEND          delta_z=0.2935
+    PUSH             delta_x=0.0 delta_y=0.22
+
+== 4. confirm chosen plan ==
+    rollout 0: 3 segment(s), centroid [0.464, 0.094, 0.146]
+  measured gate: coverage 100% of material inside target (≥ 50% goal)
+  final plan verified: SUCCESS (conf 1.00) — [coverage 100% of material inside target (≥ 50% goal)] The entire pile of beans was successfully pushed together into the target region.
+DEMO_OK

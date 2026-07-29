@@ -1,0 +1,43 @@
+{
+  "action_proposals": [
+    {
+      "description": "Perform two perpendicular squeezes on the playdoh. First, move to the center, descend, squeeze to 4cm width, release, rotate 90 degrees, and squeeze again to 4cm.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": -0.0458,
+          "delta_y": 0.0179,
+          "reasoning": "Move the gripper from its initial position to be directly centered above the blue playdoh."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.1863,
+          "reasoning": "Lower the gripper to the specified height of 0.257m, just above the table, to prepare for squeezing."
+        },
+        {
+          "type": "GRASP",
+          "grasp_width": 0.04,
+          "reasoning": "Squeeze the playdoh along its current axis to a width of 4cm to begin shaping it."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Open the gripper to release the playdoh after the first squeeze."
+        },
+        {
+          "type": "ROTATE",
+          "delta_yaw": 1.5708,
+          "reasoning": "Rotate the gripper 90 degrees (pi/2 radians) to prepare for squeezing from a perpendicular direction."
+        },
+        {
+          "type": "GRASP",
+          "grasp_width": 0.04,
+          "reasoning": "Perform a second squeeze on the playdoh from a perpendicular angle to a width of 4cm to form a block shape."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Open the gripper to release the final shaped playdoh."
+        }
+      ]
+    }
+  ]
+}

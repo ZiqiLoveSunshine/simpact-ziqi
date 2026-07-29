@@ -1,0 +1,202 @@
+{
+  "action_proposals": [
+        {
+            "description": "A cautious plan that pushes the bottle at a low height to maximize stability. It involves approaching the bottle, descending, performing a single push, and retracting.",
+            "action_sequence": [
+                {
+                    "type": "PUSH",
+                    "delta_x": 0.0,
+                    "delta_y": 0.0,
+                    "reasoning": "Move the end effector to a position aligned with the bottle's x-coordinate and 3cm behind it in the y-direction, preparing for the push."
+                },
+                {
+                    "type": "GRASP",
+                    "grasp_width": 0.01,
+                    "reasoning": "Lower the end effector to a height of 10cm from the table, a safe, low point on the bottle to ensure stability during the push."
+                },
+                {
+                    "type": "PUSH",
+                    "delta_x": -0.2,
+                    "delta_y": 0.2,
+                    "reasoning": "Push the bottle forward by 20cm (3cm to close the gap and 17cm to align with the can)."
+                }
+            ]
+        },
+        {
+            "description": "A cautious plan that pushes the bottle at a low height to maximize stability. It involves approaching the bottle, descending, performing a single push, and retracting.",
+            "action_sequence": [
+                {
+                    "type": "PUSH",
+                    "delta_x": 0.0,
+                    "delta_y": 0.0,
+                    "reasoning": "Move the end effector to a position aligned with the bottle's x-coordinate and 3cm behind it in the y-direction, preparing for the push."
+                },
+                {
+                    "type": "GRASP",
+                    "grasp_width": 0.01,
+                    "reasoning": "Lower the end effector to a height of 10cm from the table, a safe, low point on the bottle to ensure stability during the push."
+                },
+                {
+                    "type": "PUSH",
+                    "delta_x": 0.2,
+                    "delta_y": 0.2,
+                    "reasoning": "Push the bottle forward by 20cm (3cm to close the gap and 17cm to align with the can)."
+                }
+            ]
+        },
+        {
+            "description": "A cautious plan that pushes the bottle at a low height to maximize stability. It involves approaching the bottle, descending, performing a single push, and retracting.",
+            "action_sequence": [
+                {
+                    "type": "PUSH",
+                    "delta_x": 0.0,
+                    "delta_y": 0.0,
+                    "reasoning": "Move the end effector to a position aligned with the bottle's x-coordinate and 3cm behind it in the y-direction, preparing for the push."
+                },
+                {
+                    "type": "GRASP",
+                    "grasp_width": 0.01,
+                    "reasoning": "Lower the end effector to a height of 10cm from the table, a safe, low point on the bottle to ensure stability during the push."
+                },
+                {
+                    "type": "PUSH",
+                    "delta_x": 0.2,
+                    "delta_y": -0.2,
+                    "reasoning": "Push the bottle forward by 20cm (3cm to close the gap and 17cm to align with the can)."
+                }
+            ]
+        },
+        {
+            "description": "A cautious plan that pushes the bottle at a low height to maximize stability. It involves approaching the bottle, descending, performing a single push, and retracting.",
+            "action_sequence": [
+                {
+                    "type": "PUSH",
+                    "delta_x": 0.0,
+                    "delta_y": 0.0,
+                    "reasoning": "Move the end effector to a position aligned with the bottle's x-coordinate and 3cm behind it in the y-direction, preparing for the push."
+                },
+                {
+                    "type": "GRASP",
+                    "grasp_width": 0.01,
+                    "reasoning": "Lower the end effector to a height of 10cm from the table, a safe, low point on the bottle to ensure stability during the push."
+                },
+                {
+                    "type": "PUSH",
+                    "delta_x": -0.2,
+                    "delta_y": -0.2,
+                    "reasoning": "Push the bottle forward by 20cm (3cm to close the gap and 17cm to align with the can)."
+                }
+            ]
+        },
+        {
+            "description": "A cautious plan that pushes the bottle at a low height to maximize stability. It involves approaching the bottle, descending, performing a single push, and retracting.",
+            "action_sequence": [
+                {
+                    "type": "PUSH",
+                    "delta_x": 0.0,
+                    "delta_y": 0.0,
+                    "reasoning": "Move the end effector to a position aligned with the bottle's x-coordinate and 3cm behind it in the y-direction, preparing for the push."
+                },
+                {
+                    "type": "GRASP",
+                    "grasp_width": 0.01,
+                    "reasoning": "Lower the end effector to a height of 10cm from the table, a safe, low point on the bottle to ensure stability during the push."
+                },
+                {
+                    "type": "PUSH",
+                    "delta_x": 0.0,
+                    "delta_y": 0.2,
+                    "reasoning": "Push the bottle forward by 20cm (3cm to close the gap and 17cm to align with the can)."
+                }
+            ]
+        },
+        {
+            "description": "A cautious plan that pushes the bottle at a low height to maximize stability. It involves approaching the bottle, descending, performing a single push, and retracting.",
+            "action_sequence": [
+                {
+                    "type": "PUSH",
+                    "delta_x": 0.0,
+                    "delta_y": 0.0,
+                    "reasoning": "Move the end effector to a position aligned with the bottle's x-coordinate and 3cm behind it in the y-direction, preparing for the push."
+                },
+                {
+                    "type": "GRASP",
+                    "grasp_width": 0.01,
+                    "reasoning": "Lower the end effector to a height of 10cm from the table, a safe, low point on the bottle to ensure stability during the push."
+                },
+                {
+                    "type": "PUSH",
+                    "delta_x": 0.0,
+                    "delta_y": -0.2,
+                    "reasoning": "Push the bottle forward by 20cm (3cm to close the gap and 17cm to align with the can)."
+                }
+            ]
+        },
+        {
+            "description": "A cautious plan that pushes the bottle at a low height to maximize stability. It involves approaching the bottle, descending, performing a single push, and retracting.",
+            "action_sequence": [
+                {
+                    "type": "PUSH",
+                    "delta_x": 0.0,
+                    "delta_y": 0.0,
+                    "reasoning": "Move the end effector to a position aligned with the bottle's x-coordinate and 3cm behind it in the y-direction, preparing for the push."
+                },
+                {
+                    "type": "GRASP",
+                    "grasp_width": 0.01,
+                    "reasoning": "Lower the end effector to a height of 10cm from the table, a safe, low point on the bottle to ensure stability during the push."
+                },
+                {
+                    "type": "PUSH",
+                    "delta_x": 0.2,
+                    "delta_y": 0.0,
+                    "reasoning": "Push the bottle forward by 20cm (3cm to close the gap and 17cm to align with the can)."
+                }
+            ]
+        },
+        {
+            "description": "A cautious plan that pushes the bottle at a low height to maximize stability. It involves approaching the bottle, descending, performing a single push, and retracting.",
+            "action_sequence": [
+                {
+                    "type": "PUSH",
+                    "delta_x": 0.0,
+                    "delta_y": 0.0,
+                    "reasoning": "Move the end effector to a position aligned with the bottle's x-coordinate and 3cm behind it in the y-direction, preparing for the push."
+                },
+                {
+                    "type": "GRASP",
+                    "grasp_width": 0.01,
+                    "reasoning": "Lower the end effector to a height of 10cm from the table, a safe, low point on the bottle to ensure stability during the push."
+                },
+                {
+                    "type": "PUSH",
+                    "delta_x": -0.2,
+                    "delta_y": 0.0,
+                    "reasoning": "Push the bottle forward by 20cm (3cm to close the gap and 17cm to align with the can)."
+                }
+            ]
+        },
+        {
+            "description": "A cautious plan that pushes the bottle at a low height to maximize stability. It involves approaching the bottle, descending, performing a single push, and retracting.",
+            "action_sequence": [
+                {
+                    "type": "PUSH",
+                    "delta_x": 0.0,
+                    "delta_y": 0.0,
+                    "reasoning": "Move the end effector to a position aligned with the bottle's x-coordinate and 3cm behind it in the y-direction, preparing for the push."
+                },
+                {
+                    "type": "GRASP",
+                    "grasp_width": 0.01,
+                    "reasoning": "Lower the end effector to a height of 10cm from the table, a safe, low point on the bottle to ensure stability during the push."
+                },
+                {
+                    "type": "PUSH",
+                    "delta_x": -0.4,
+                    "delta_y": 0.0,
+                    "reasoning": "Push the bottle forward by 20cm (3cm to close the gap and 17cm to align with the can)."
+                }
+            ]
+        }
+    ]
+}

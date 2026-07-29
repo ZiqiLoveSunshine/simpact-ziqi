@@ -1,0 +1,314 @@
+{
+  "action_proposals": [
+    {
+      "description": "Create a standard, symmetric U-shape by moving the free end to a position with the same x-coordinate as the fixed end and a mirrored y-coordinate.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": 0.0019,
+          "delta_y": -0.0042,
+          "reasoning": "Aligning the gripper precisely above the rope's free end (0.3859, -0.2273) from its initial position (0.3840, -0.2231)."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.1774,
+          "reasoning": "Lowering the gripper from its initial height of 0.4344m to the required grasping height of 0.257m."
+        },
+        {
+          "type": "GRASP",
+          "width": 0.05,
+          "reasoning": "Grasping the rope with the specified secure gripper width of 0.05."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0928,
+          "delta_y": 0.0913,
+          "reasoning": "Pushing the rope's free end to (0.4787, -0.1360) to form a symmetric U-shape relative to the fixed end at (0.4787, 0.1360)."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Releasing the rope to finalize the U-shape."
+        }
+      ]
+    },
+    {
+      "description": "Form a wider U-shape by moving the free end to the same x-coordinate as the fixed end but a y-coordinate that increases the distance between the ends.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": 0.0019,
+          "delta_y": -0.0042,
+          "reasoning": "Aligning the gripper precisely above the rope's free end (0.3859, -0.2273) from its initial position (0.3840, -0.2231)."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.1774,
+          "reasoning": "Lowering the gripper from its initial height of 0.4344m to the required grasping height of 0.257m."
+        },
+        {
+          "type": "GRASP",
+          "width": 0.05,
+          "reasoning": "Grasping the rope with the specified secure gripper width of 0.05."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0928,
+          "delta_y": 0.0413,
+          "reasoning": "Pushing the rope's free end to (0.4787, -0.1860) to create a U-shape that is wider than the standard symmetric form."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Releasing the rope to finalize the wide U-shape."
+        }
+      ]
+    },
+    {
+      "description": "Form a narrower U-shape by moving the free end to the same x-coordinate as the fixed end but a y-coordinate that decreases the distance between the ends.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": 0.0019,
+          "delta_y": -0.0042,
+          "reasoning": "Aligning the gripper precisely above the rope's free end (0.3859, -0.2273) from its initial position (0.3840, -0.2231)."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.1774,
+          "reasoning": "Lowering the gripper from its initial height of 0.4344m to the required grasping height of 0.257m."
+        },
+        {
+          "type": "GRASP",
+          "width": 0.05,
+          "reasoning": "Grasping the rope with the specified secure gripper width of 0.05."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0928,
+          "delta_y": 0.1413,
+          "reasoning": "Pushing the rope's free end to (0.4787, -0.0860) to create a U-shape that is narrower than the standard symmetric form."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Releasing the rope to finalize the narrow U-shape."
+        }
+      ]
+    },
+    {
+      "description": "Create a shorter, more compact U-shape by moving the free end to a smaller x-coordinate than the fixed end, while maintaining y-axis symmetry.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": 0.0019,
+          "delta_y": -0.0042,
+          "reasoning": "Aligning the gripper precisely above the rope's free end (0.3859, -0.2273) from its initial position (0.3840, -0.2231)."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.1774,
+          "reasoning": "Lowering the gripper from its initial height of 0.4344m to the required grasping height of 0.257m."
+        },
+        {
+          "type": "GRASP",
+          "width": 0.05,
+          "reasoning": "Grasping the rope with the specified secure gripper width of 0.05."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0741,
+          "delta_y": 0.0913,
+          "reasoning": "Pushing the rope's free end to (0.4600, -0.1360) to form a U-shape that is shorter than the fixed end's position."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Releasing the rope to finalize the short U-shape."
+        }
+      ]
+    },
+    {
+      "description": "Create a longer, more extended U-shape by moving the free end to a larger x-coordinate than the fixed end, while maintaining y-axis symmetry.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": 0.0019,
+          "delta_y": -0.0042,
+          "reasoning": "Aligning the gripper precisely above the rope's free end (0.3859, -0.2273) from its initial position (0.3840, -0.2231)."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.1774,
+          "reasoning": "Lowering the gripper from its initial height of 0.4344m to the required grasping height of 0.257m."
+        },
+        {
+          "type": "GRASP",
+          "width": 0.05,
+          "reasoning": "Grasping the rope with the specified secure gripper width of 0.05."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.1141,
+          "delta_y": 0.0913,
+          "reasoning": "Pushing the rope's free end to (0.5000, -0.1360) to form a U-shape that is longer than the fixed end's position."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Releasing the rope to finalize the long U-shape."
+        }
+      ]
+    },
+    {
+      "description": "Form a U-shape that is both shorter and wider by moving the free end to a smaller x-coordinate and a more negative y-coordinate.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": 0.0019,
+          "delta_y": -0.0042,
+          "reasoning": "Aligning the gripper precisely above the rope's free end (0.3859, -0.2273) from its initial position (0.3840, -0.2231)."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.1774,
+          "reasoning": "Lowering the gripper from its initial height of 0.4344m to the required grasping height of 0.257m."
+        },
+        {
+          "type": "GRASP",
+          "width": 0.05,
+          "reasoning": "Grasping the rope with the specified secure gripper width of 0.05."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0741,
+          "delta_y": 0.0413,
+          "reasoning": "Pushing the rope's free end to (0.4600, -0.1860) to create a short and wide U-shape."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Releasing the rope to finalize the short, wide U-shape."
+        }
+      ]
+    },
+    {
+      "description": "Form a U-shape that is both longer and narrower by moving the free end to a larger x-coordinate and a less negative y-coordinate.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": 0.0019,
+          "delta_y": -0.0042,
+          "reasoning": "Aligning the gripper precisely above the rope's free end (0.3859, -0.2273) from its initial position (0.3840, -0.2231)."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.1774,
+          "reasoning": "Lowering the gripper from its initial height of 0.4344m to the required grasping height of 0.257m."
+        },
+        {
+          "type": "GRASP",
+          "width": 0.05,
+          "reasoning": "Grasping the rope with the specified secure gripper width of 0.05."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.1141,
+          "delta_y": 0.1413,
+          "reasoning": "Pushing the rope's free end to (0.5000, -0.0860) to create a long and narrow U-shape."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Releasing the rope to finalize the long, narrow U-shape."
+        }
+      ]
+    },
+    {
+      "description": "Create a slightly asymmetric U-shape by targeting a y-coordinate that is not perfectly mirrored to the fixed end's y-coordinate.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": 0.0019,
+          "delta_y": -0.0042,
+          "reasoning": "Aligning the gripper precisely above the rope's free end (0.3859, -0.2273) from its initial position (0.3840, -0.2231)."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.1774,
+          "reasoning": "Lowering the gripper from its initial height of 0.4344m to the required grasping height of 0.257m."
+        },
+        {
+          "type": "GRASP",
+          "width": 0.05,
+          "reasoning": "Grasping the rope with the specified secure gripper width of 0.05."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0928,
+          "delta_y": 0.0773,
+          "reasoning": "Pushing the rope's free end to (0.4787, -0.1500) to form a slightly asymmetric U-shape."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Releasing the rope to finalize the asymmetric U-shape."
+        }
+      ]
+    },
+    {
+      "description": "Create a slightly skewed U-shape by targeting an x-coordinate that is close to, but not exactly the same as, the fixed end's x-coordinate.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": 0.0019,
+          "delta_y": -0.0042,
+          "reasoning": "Aligning the gripper precisely above the rope's free end (0.3859, -0.2273) from its initial position (0.3840, -0.2231)."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.1774,
+          "reasoning": "Lowering the gripper from its initial height of 0.4344m to the required grasping height of 0.257m."
+        },
+        {
+          "type": "GRASP",
+          "width": 0.05,
+          "reasoning": "Grasping the rope with the specified secure gripper width of 0.05."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0841,
+          "delta_y": 0.0913,
+          "reasoning": "Pushing the rope's free end to (0.4700, -0.1360) to form a slightly skewed, but still valid, U-shape."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Releasing the rope to finalize the skewed U-shape."
+        }
+      ]
+    },
+    {
+      "description": "Form a compact and neat U-shape by choosing a target point that makes the shape both slightly shorter and narrower than the standard symmetric form.",
+      "action_sequence": [
+        {
+          "type": "PUSH",
+          "delta_x": 0.0019,
+          "delta_y": -0.0042,
+          "reasoning": "Aligning the gripper precisely above the rope's free end (0.3859, -0.2273) from its initial position (0.3840, -0.2231)."
+        },
+        {
+          "type": "DESCEND",
+          "delta_z": 0.1774,
+          "reasoning": "Lowering the gripper from its initial height of 0.4344m to the required grasping height of 0.257m."
+        },
+        {
+          "type": "GRASP",
+          "width": 0.05,
+          "reasoning": "Grasping the rope with the specified secure gripper width of 0.05."
+        },
+        {
+          "type": "PUSH",
+          "delta_x": 0.0841,
+          "delta_y": 0.1273,
+          "reasoning": "Pushing the rope's free end to (0.4700, -0.1000) to create a compact and tidy U-shape."
+        },
+        {
+          "type": "RELEASE",
+          "reasoning": "Releasing the rope to finalize the compact U-shape."
+        }
+      ]
+    }
+  ]
+}

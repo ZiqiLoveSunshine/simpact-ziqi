@@ -1,0 +1,12 @@
+
+{ee_pose}
+
+{object_poses}
+
+--- World Coordinate System ---
++x: out of screen, or downwards in image
++y: rightward
++z: upward
+
+--- Critical Rules for this Task ---
+1. For this particular task, **ONLY** use the primitives **"PUSH", "ROTATE", "DESCEND"

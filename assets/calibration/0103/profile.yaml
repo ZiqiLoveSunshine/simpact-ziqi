@@ -1,0 +1,13 @@
+name: '0103'
+date: '2025-01-03'
+note: rigid push/obstacle calibration; cam0->robot=optimized_transform1_0103_1751,
+  cam1->robot=optimized_transform2_0103_1824
+cameras:
+  cam0:
+    image_size:
+    - 640
+    - 480
+  cam1:
+    image_size:
+    - 640
+    - 480

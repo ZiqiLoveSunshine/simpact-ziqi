@@ -1,0 +1,140 @@
+<mujoco model="floating_panda_gripper">
+  <compiler angle="radian" meshdir="." autolimits="true"/>
+  
+  <option gravity="0 0 -9.81" timestep="0.002" cone="elliptic"/>
+  
+  <default>
+    <default class="panda">
+      <material specular="0.5" shininess="0.25"/>
+      <joint armature="0.1" damping="1"/>
+      
+      <default class="finger">
+        <joint axis="0 1 0" type="slide" range="0 0.04" damping="5.0"/>
+      </default>
+
+      <default class="visual">
+        <geom type="mesh" contype="0" conaffinity="0" group="2"/>
+      </default>
+
+      <default class="collision">
+        <geom type="mesh" group="3" condim="3"/>
+        <default class="fingertip_pad_collision_1">
+          <geom type="box" size="0.0085 0.004 0.0085" pos="0 0.0055 0.0445" condim="3" friction="7.0 0.1 0.05"/>
+        </default>
+        <default class="fingertip_pad_collision_2">
+          <geom type="box" size="0.003 0.002 0.003" pos="0.0055 0.002 0.05" condim="3" friction="7.0 0.1 0.05"/>
+        </default>
+        <default class="fingertip_pad_collision_3">
+          <geom type="box" size="0.003 0.002 0.003" pos="-0.0055 0.002 0.05" condim="3" friction="7.0 0.1 0.05"/>
+        </default>
+        <default class="fingertip_pad_collision_4">
+          <geom type="box" size="0.003 0.002 0.0035" pos="0.0055 0.002 0.0395" condim="3" friction="7.0 0.1 0.05"/>
+        </default>
+        <default class="fingertip_pad_collision_5">
+          <geom type="box" size="0.003 0.002 0.0035" pos="-0.0055 0.002 0.0395" condim="3" friction="7.0 0.1 0.05"/>
+        </default>
+      </default>
+    </default>
+  </default>
+
+  <asset>
+    <material class="panda" name="white" rgba="1 1 1 1"/>
+    <material class="panda" name="off_white" rgba="0.901961 0.921569 0.929412 1"/>
+    <material class="panda" name="black" rgba="0.25 0.25 0.25 1"/>
+    <material class="panda" name="green" rgba="0 1 0 1"/>
+
+    <!-- Visual meshes -->
+    <mesh file="./meshes/hand_0.obj"/>
+    <mesh file="./meshes/hand_1.obj"/>
+    <mesh file="./meshes/hand_2.obj"/>
+    <mesh file="./meshes/hand_3.obj"/>
+    <mesh file="./meshes/hand_4.obj"/>
+    <mesh file="./meshes/finger_0.obj"/>
+    <mesh file="./meshes/finger_1.obj"/>
+
+    <mesh file="./meshes/link7_0.obj"/>
+    <mesh file="./meshes/link7_1.obj"/>
+    <mesh file="./meshes/link7_2.obj"/>
+    <mesh file="./meshes/link7_3.obj"/>
+    <mesh file="./meshes/link7_4.obj"/>
+    <mesh file="./meshes/link7_5.obj"/>
+    <mesh file="./meshes/link7_6.obj"/>
+    <mesh file="./meshes/link7_7.obj"/>
+    
+    <!-- Collision meshes -->
+    <mesh name="hand_c" file="./meshes/hand_box.stl"/>
+    <mesh name="link7_c" file="./meshes/link7.stl"/>
+  </asset>
+
+  <worldbody>
+    <light name="top" pos="0 0 2" mode="trackcom"/>
+    
+    <!-- Mocap body for kinematic control -->
+    <body mocap="true" name="gripper_mocap" pos="0 -0.0 0.5">
+      <geom conaffinity="0" contype="0" pos="0 0 0" rgba="0 0.5 0 0.7" size="0.005 0.005 0.005" type="box" group="4"/>
+      <geom conaffinity="0" contype="0" pos="0 0 0" rgba="0 0.5 0 0.1" size="0.5 0.005 0.005" type="box" group="4"/>
+      <geom conaffinity="0" contype="0" pos="0 0 0" rgba="0 0.5 0 0.1" size="0.005 0.5 0.001" type="box" group="4"/>
+      <geom conaffinity="0" contype="0" pos="0 0 0" rgba="0 0.5 0 0.1" size="0.005 0.005 0.5" type="box" group="4"/>
+    </body>
+
+    <!-- Floating gripper base -->
+    <!-- Note: Previous manual rotation was not appropriate -->
+    <body name="hand" pos="0 -0.0 0.5" quat="1 0 0 0" childclass="panda">
+      <freejoint/>
+      <inertial mass="0.73" pos="-0.01 0 0.03" diaginertia="0.001 0.0025 0.0017"/>
+      <geom mesh="hand_0" material="off_white" class="visual"/>
+      <geom mesh="hand_1" material="black" class="visual"/>
+      <geom mesh="hand_2" material="black" class="visual"/>
+      <geom mesh="hand_3" material="white" class="visual"/>
+      <geom mesh="hand_4" material="off_white" class="visual"/>
+      <geom mesh="hand_c" class="collision"/>
+
+      <!-- End-effector center -->
+      <body name="ee_center_body" pos="0 0 0.105">
+        <geom name="ee_visual" type="box" size="0.005 0.005 0.005" rgba="0 0 0 0" class="visual"/>
+
+        <site name='ee_center_site' size="0.001" rgba="0 0 0 0" class="visual"/>
+      </body>
+
+      <!-- Left finger -->
+      <body name="left_finger" pos="0 0 0.0584">
+        <inertial mass="0.015" pos="0 0 0" diaginertia="2.375e-6 2.375e-6 7.5e-7"/>
+        <joint name="finger_joint1" class="finger"/>
+        <geom mesh="finger_0" material="off_white" class="visual"/>
+        <geom mesh="finger_1" material="black" class="visual"/>
+        <geom mesh="finger_0" friction="1.0 0.005 0.0001" class="collision"/>
+        <geom class="fingertip_pad_collision_1"/>
+        <geom class="fingertip_pad_collision_2"/>
+        <geom class="fingertip_pad_collision_3"/>
+        <geom class="fingertip_pad_collision_4"/>
+        <geom class="fingertip_pad_collision_5"/>
+      </body>
+
+      <!-- Right finger -->
+      <body name="right_finger" pos="0 0 0.0584" quat="0 0 0 1">
+        <inertial mass="0.015" pos="0 0 0" diaginertia="2.375e-6 2.375e-6 7.5e-7"/>
+        <joint name="finger_joint2" class="finger"/>
+        <geom mesh="finger_0" material="off_white" class="visual"/>
+        <geom mesh="finger_1" material="black" class="visual"/>
+        <geom mesh="finger_0" friction="1.0 0.005 0.0001" class="collision"/>
+        <geom class="fingertip_pad_collision_1"/>
+        <geom class="fingertip_pad_collision_2"/>
+        <geom class="fingertip_pad_collision_3"/>
+        <geom class="fingertip_pad_collision_4"/>
+        <geom class="fingertip_pad_collision_5"/>
+      </body>
+    </body>
+  </worldbody>
+
+  <!-- Weld constraint to make gripper follow mocap body -->
+  <equality>
+    <weld body1="gripper_mocap" body2="hand" solimp="0.9 0.95 0.001" solref="0.02 1"/>
+  </equality>
+
+  <!-- Gripper finger actuators -->
+  <actuator>
+    <position name="left_finger" joint="finger_joint1" kp="1000" forcerange="-200 200" ctrlrange="0 0.04"/>
+    <position name="right_finger" joint="finger_joint2" kp="1000" forcerange="-200 200" ctrlrange="0 0.04"/>
+  </actuator>
+
+</mujoco>

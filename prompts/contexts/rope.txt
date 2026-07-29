@@ -1,0 +1,21 @@
+
+{ee_pose}
+
+{object_poses}
+
+--- World Coordinate System ---
++x: out of screen, or downwards in image
++y: rightward
++z: upward
+
+--- Failure cases to avoid ---
+1. formed shape too different from a 'U' shape
+2. Two ends of the rope become too close to each other horizontally (y direction) such that it becomes a closed loop
+3. Two ends of the rope become too wide from each other horizontally (y direction) such that it becomes a straight line
+
+--- Critical Rules for this Task ---
+1. For this particular task, **ONLY** use the primitives **"PUSH", `DESCEND`, "GRASP", "RELEASE"**
+2. The robot end effector should **first use `PUSH` to move to a position above the target grasp point**. You may assume that the robot is already aligned with the rope and no rotation is required.
+3. Next the robot end effector should `DESCEND` to the height of 0.257 just above the table, 'GRASP' the rope and 'PUSH' it to the target location. 
+4. The robot should only 'GRASP' the rope **ONCE** and 'PUSH' it to the target location in a single step.
+5. Gripper width for secure grasp should be 0.05

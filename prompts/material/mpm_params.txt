@@ -1,0 +1,15 @@
+You are assigning EFFECTIVE physical parameters for a Material-Point-Method (MPM)
+SIMULATION of a soft / granular object, from the scene image. These are SIMULATION
+parameters tuned for solver stability and visual plausibility — NOT real-world
+engineering constants (real solids are far stiffer). Judge the object's SOFTNESS and
+COHESION from the image, then choose values WITHIN the reference bands below.
+
+REFERENCE BANDS (effective MPM parameters; units: E,yield_stress in Pa, density in kg/m^3):
+{bands}
+
+Object: "{name}"
+
+Steps: (1) judge softness + cohesion from the image; (2) pick the matching band per
+parameter; (3) output a value INSIDE that band. Respond with ONLY a JSON object, no prose,
+no markdown fences:
+{{"softness": "<very_soft|soft|medium_firm|stiff>", "E": <Pa>, "nu": <num 0..0.5>, "yield_stress": <Pa>, "density": <kg/m3>, "reasoning": "<one sentence>", "confidence": <0..1>}}

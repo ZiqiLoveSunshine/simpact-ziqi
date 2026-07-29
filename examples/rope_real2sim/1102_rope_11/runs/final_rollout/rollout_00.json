@@ -1,0 +1,64 @@
+{
+  "timestamp": "20260726_171949",
+  "object_names": [
+    "rope"
+  ],
+  "grasp_point": [
+    0.3859237324043827,
+    -0.227346366321533,
+    0.15298901049348712
+  ],
+  "place_point": [
+    0.4787237324043827,
+    -0.136046366321533,
+    0.15298901049348712
+  ],
+  "snapshots": [
+    {
+      "waypoint_index": 0,
+      "gripper": {
+        "position": [
+          0.3859237324043827,
+          -0.227346366321533,
+          0.15298901049348712
+        ]
+      },
+      "objects": {
+        "rope": {
+          "position": [
+            0.4866154788573701,
+            -0.03272569626777713,
+            0.14685267255364612
+          ]
+        }
+      },
+      "screenshot": "rollout_00_0.png"
+    },
+    {
+      "waypoint_index": 1,
+      "gripper": {
+        "position": [
+          0.4787237324043827,
+          -0.136046366321533,
+          0.15298901049348712
+        ]
+      },
+      "objects": {
+        "rope": {
+          "position": [
+            0.5489148857465002,
+            0.005696337575401428,
+            0.1467707233715356
+          ]
+        }
+      },
+      "screenshot": "rollout_00_1.png"
+    }
+  ],
+  "verdict": {
+    "success": true,
+    "confidence": 0.9,
+    "reason": "The rope successfully forms a U-shaped curve. The drag brought the free end closer to the fixed end, creating a single deep bend as requested.",
+    "remaining": ""
+  }
+}

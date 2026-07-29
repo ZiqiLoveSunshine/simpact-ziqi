@@ -1,0 +1,88 @@
+{
+  "action_proposals": [
+        {
+            "description": "A cautious plan that pushes the bottle at a low height to maximize stability. It involves approaching the bottle, descending, performing a single push, and retracting.",
+            "action_sequence": [
+                {
+                    "type": "PUSH",
+                    "delta_x": 0.0,
+                    "delta_y": 0.0,
+                    "reasoning": "Move the end effector to a position aligned with the bottle's x-coordinate and 3cm behind it in the y-direction, preparing for the push."
+                },
+                {
+                    "type": "ROTATE",
+                    "delta_yaw": 0.0,
+                    "reasoning": "Align the end effector orientation with the bottle's orientation for a"
+                },
+                {
+                    "type": "GRASP",
+                    "grasp_width": 0.04,
+                    "reasoning": "Lower the end effector to a height of 10cm from the table, a safe, low point on the bottle to ensure stability during the push."
+                }
+            ]
+        },    
+        {
+            "description": "A cautious plan that pushes the bottle at a low height to maximize stability. It involves approaching the bottle, descending, performing a single push, and retracting.",
+            "action_sequence": [
+                {
+                    "type": "PUSH",
+                    "delta_x": 0.0,
+                    "delta_y": 0.0,
+                    "reasoning": "Move the end effector to a position aligned with the bottle's x-coordinate and 3cm behind it in the y-direction, preparing for the push."
+                },
+                {
+                    "type": "ROTATE",
+                    "delta_yaw": 1.57,
+                    "reasoning": "Align the end effector orientation with the bottle's orientation for a"
+                },
+                {
+                    "type": "GRASP",
+                    "grasp_width": 0.04,
+                    "reasoning": "Lower the end effector to a height of 10cm from the table, a safe, low point on the bottle to ensure stability during the push."
+                }
+            ]
+        },
+        {
+            "description": "A cautious plan that pushes the bottle at a low height to maximize stability. It involves approaching the bottle, descending, performing a single push, and retracting.",
+            "action_sequence": [
+                {
+                    "type": "PUSH",
+                    "delta_x": 0.05,
+                    "delta_y": 0.0,
+                    "reasoning": "Move the end effector to a position aligned with the bottle's x-coordinate and 3cm behind it in the y-direction, preparing for the push."
+                },
+                {
+                    "type": "ROTATE",
+                    "delta_yaw": 0.0,
+                    "reasoning": "Align the end effector orientation with the bottle's orientation for a"
+                },
+                {
+                    "type": "GRASP",
+                    "grasp_width": 0.04,
+                    "reasoning": "Lower the end effector to a height of 10cm from the table, a safe, low point on the bottle to ensure stability during the push."
+                }
+            ]
+        },
+        {
+            "description": "A cautious plan that pushes the bottle at a low height to maximize stability. It involves approaching the bottle, descending, performing a single push, and retracting.",
+            "action_sequence": [
+                {
+                    "type": "PUSH",
+                    "delta_x": -0.05,
+                    "delta_y": 0.0,
+                    "reasoning": "Move the end effector to a position aligned with the bottle's x-coordinate and 3cm behind it in the y-direction, preparing for the push."
+                },
+                {
+                    "type": "ROTATE",
+                    "delta_yaw": 0.0,
+                    "reasoning": "Align the end effector orientation with the bottle's orientation for a"
+                },
+                {
+                    "type": "GRASP",
+                    "grasp_width": 0.04,
+                    "reasoning": "Lower the end effector to a height of 10cm from the table, a safe, low point on the bottle to ensure stability during the push."
+                }
+            ]
+        }
+    ]
+}

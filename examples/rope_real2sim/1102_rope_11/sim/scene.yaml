@@ -1,0 +1,21 @@
+# Rope ARAP scene — minimal schema. fixed_point (anchored end), free_end (graspable
+# end) and initial_ee_pose are consumed (rope_rollout + context). The cloud is read
+# directly from segmented_object.ply. Endpoints here are the original human
+# pick_points; the VLM-grounding pipeline (simpact.generator.ground) can regenerate
+# them and stamp endpoint_source: vlm.
+fixed_point:
+- 0.47867699434916056
+- 0.13600409720392806
+- 0.15298901049348712
+free_end:
+- 0.3859237324043827
+- -0.227346366321533
+- 0.14306119812967888
+endpoint_source: manual
+camera: {profile: "1026", cam: 1}  # calibration from assets/calibration/1026
+# runtime EE source — sim/ is self-sufficient; == capture/initial_ee_pose.txt
+initial_ee_pose:
+- [0.955630387471681, 0.2830364150045126, -0.0816146452673655, 0.384]
+- [0.28378350741304503, -0.958885015783857, -0.0025391781233453543, -0.2231]
+- [-0.07897774028848123, -0.020734374516372323, -0.9966607257499113, 0.4344]
+- [0.0, 0.0, 0.0, 1.0]

@@ -1,0 +1,63 @@
+You are an AI assistant functioning as an embodied planner for SWEEPING a pile of
+granular material (beans) into a TARGET REGION with a flat pusher. Analyze a series of
+simulation rollouts — each moves the pusher along a sequence of straight segments,
+shoving the pile — to learn from their successes and failures, then propose **one new,
+optimized action plan** that sweeps as much of the pile as possible into the target.
+
+The pusher is a thin flat blade held vertically; each segment moves it in a straight
+line at constant speed, pushing whatever is in front of it. To sweep the pile into the
+target, position the blade **behind** the pile (on the far side from the target) and
+push **toward** the target center; use several segments to herd stragglers in.
+
+**Sweep ALL the beans TOGETHER into the target — keep the pile intact, do not split it:**
+- **Keep the blade's wide flat face broadside to the push — perpendicular to the direction
+  it moves** — so the whole face shoves the beans forward as one group. This is a
+  RELATIONSHIP between the blade's orientation and the push direction, not a fixed angle:
+  whatever direction you push, set the blade's yaw so its flat face is square to that
+  direction. If you change the push direction between segments, adjust the yaw so the face
+  stays broadside to the new direction. Letting the blade go **edge-on** (its face parallel
+  to the motion) makes it knife *through* the pile, splitting it into streaks and leaving
+  beans behind — the main failure. (The simulator drags beans along even with an edge-on
+  blade, so a high coverage number with a mis-oriented blade is still wrong on a real robot
+  with loose beans.)
+- **Push through the pile's center of mass**, straight toward the target center, so the
+  beans move together rather than scattering to the sides.
+- Start fully behind the pile and add follow-up push segments to collect any stragglers.
+
+The simulator and the real world share similar physics but may have a sim2real gap.
+
+### Provided Data (in the 'Task Context' section):
+1. **High-Level Instruction:** sweep the pile into the target region.
+2. **Real-World Context:** the pile's center, the target region's center, the frame.
+3. **Simulation Rollouts:** each executed plan and its outcome:
+   - The sequence of pusher segments (start position, yaw, push delta)
+   - The resulting pile centroid and bounding box
+   - Its verifier verdict — including the **measured coverage** (fraction of material
+     inside the target) — if present
+   - A screenshot of the final scene (beans + magenta target region)
+
+The screenshots are attached at the end in order (final_scene_0, ...). Use them, and
+the measured coverage, to judge how much of the pile reached the target.
+
+### Your Task:
+1. **Analyze the rollouts:** relate each pusher path to the coverage it achieved. Which
+   push direction/length got the most material into the target? Why did others fail
+   (pushed the wrong way, too short, missed part of the pile, shoved beans past the
+   target)?
+2. **Propose an optimized plan:** correct the direction/length so more of the pile ends
+   inside the target. Start behind the pile and push toward the target center.
+
+### Output Format:
+Respond exclusively as JSON with a single key `"action_proposals"` — a list with one
+object with two keys:
+* `description`: the logic of your plan and why the prior rollouts failed/succeeded.
+* `action_sequence`: a list of actions in the universal 6DoF + gripper format, each a
+  pusher segment:
+    * `move`: `{ "type": "move", "delta_x": float, "delta_y": float, "delta_z": float, "delta_roll": 0, "delta_pitch": 0, "delta_yaw": float, "reasoning": string }`
+  Convention: each `move` sweeps the pusher by its (delta_x, delta_y) in the table plane
+  (deltas are cumulative from the start); `delta_yaw` rotates the blade — set it so the
+  blade's flat face stays **broadside (perpendicular) to the push direction**, not edge-on.
+  Use `delta_z` only to lower the blade to the table at the start. Emit 1–3 sweeping
+  `move`s. Every action MUST have `"type": "move"`.
+
+**DO NOT** include any text or formatting outside of the JSON block.

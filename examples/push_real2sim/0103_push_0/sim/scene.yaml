@@ -1,0 +1,11 @@
+# Push scene — camera calibration reference + initial EE pose (the runtime sources;
+# sim/ is self-sufficient). Object poses come from the trial's 6d/mujoco pose files;
+# the camera profile resolves cam K + extrinsic through the registry
+# (simpact.real2sim.camera_calibration, assets/calibration/0103).
+camera: {profile: "0103", cam: 1}
+# runtime EE source — sim/ is self-sufficient; == capture/initial_ee_pose.txt
+initial_ee_pose:
+- [0.015904889067378802, 0.9998558391926995, -0.0059443532883784456, 0.4859]
+- [0.1899594637729971, 0.002815215765208323, 0.9817878980122289, -0.2317]
+- [0.9816630973133449, -0.01674441376871716, -0.18988730336889892, 0.2512]
+- [0.0, 0.0, 0.0, 1.0]

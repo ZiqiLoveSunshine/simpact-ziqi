@@ -1,0 +1,41 @@
+You are grounding the two ENDS of a single rope for a robot manipulation task. A
+geometry pass has already found the rope's two tips and drawn a labeled marker at each
+one on the real camera image you are shown: marker "A" and marker "B". Each marker sits
+on one physical end of the rope. Your ONLY job is to decide the ROLE of each marked end
+— you do NOT need to locate the ends yourself (that is already done).
+
+The two roles are:
+- FIXED end: the end that is anchored / held / clamped in place and will NOT be moved
+  by the robot (it stays put during manipulation). Look for a physical cue — a clamp,
+  a fixture, a weight, a hand, the rope disappearing under something, or the end nearer
+  a wall/edge that pins it. The task context below may also state which end is fixed.
+- FREE end: the loose, movable end the robot can grasp and drag. It is the end NOT
+  anchored.
+
+Decide which marker (A or B) is the FIXED end and which is the FREE end.
+
+Also judge whether the two markers are actually placed on the two DISTINCT ends of the
+rope (one at each tip, not both on the same end, not mid-rope). Set are_valid_tips
+accordingly — if the markers look wrong, still give your best fixed/free guess but say
+so with low confidence.
+
+If the scene gives NO physical cue and the context does not specify which end is fixed
+(a symmetric free rope on a table), pick the assignment that best serves the task
+described in the context, set a LOWER confidence (<= 0.5), and explain the ambiguity in
+reasoning.
+
+You are shown, in order:
+- The task context (coordinate frame, the instruction, any stated fixed/free cue).
+- The annotated camera image with markers A and B on the rope's two ends.
+
+Respond with ONLY a JSON object, no prose, no markdown fences:
+
+{
+  "fixed": "A" | "B",
+  "free": "A" | "B",
+  "are_valid_tips": true | false,
+  "confidence": 0.0-1.0,
+  "reasoning": "one or two sentences: the cue you used (clamp/fixture/context/ambiguous) and why"
+}
+
+Constraints: "fixed" and "free" MUST be different, and each MUST be exactly "A" or "B".
