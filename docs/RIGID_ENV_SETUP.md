@@ -150,7 +150,15 @@ mesh = out["glb"]                # trimesh; also out["gaussian"], out["pointmap"
 GroundingDINO loads from `transformers` (HF `IDEA-Research/grounding-dino-tiny`)
 and SAM2 + its configs (`configs/sam2.1/sam2.1_hiera_l.yaml`) ship inside the
 `sam2` wheel — so `SIMPACT_GROUNDED_SAM2_DIR` is optional (only the SAM2
-checkpoint `sam2.1_hiera_large.pt`, ~900 MB, is an external download). On
+checkpoint `sam2.1_hiera_large.pt`, ~900 MB, is an external download:
+
+```bash
+wget https://dl.fbaipublicfiles.com/segment_anything_2/092824/sam2.1_hiera_large.pt
+# then set SIMPACT_SAM2_CHECKPOINT=/path/to/sam2.1_hiera_large.pt in .env
+```
+
+— the official release asset; see the `facebookresearch/sam2` README for
+alternatives). On
 transformers 5.x, `post_process_grounded_object_detection` renamed
 `box_threshold`→`threshold` and returns string labels under `text_labels` (not
 `labels`). Also scope `torch.autocast(dtype=bfloat16)` to the segment call — the

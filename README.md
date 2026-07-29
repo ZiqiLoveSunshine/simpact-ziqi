@@ -40,8 +40,13 @@ cp .env.example .env           # then set the vars below
 - `GOOGLE_API_KEY` — required by every VLM step (propose/verify/regress, rope endpoint
   grounding, material-ID).
 - MPM loops (dough/sweep) need **CUDA + warp**; run renders headless with `MUJOCO_GL=egl`.
-- real2sim perception needs `SIMPACT_GROUNDED_SAM2_DIR` + `SIMPACT_SAM2_CHECKPOINT`
-  (rigid also uses SAM-3D + `SIMPACT_FOUNDATIONPOSE_DIR`).
+- **Segmentation / deformable scene rebuilds** need only the SAM2 checkpoint
+  (`SIMPACT_SAM2_CHECKPOINT`, ~900 MB — a Grounded-SAM-2 repo clone is *optional*:
+  GroundingDINO loads from `transformers` and SAM2 from the `sam2` wheel).
+- **The full push perception** (Grounded-SAM-2 → SAM-3D → FoundationPose) has its own
+  install guide: [docs/RIGID_ENV_SETUP.md](docs/RIGID_ENV_SETUP.md)
+  (`bash scripts/setup_rigid_env.sh`). Not needed to run the bundled examples —
+  every trial ships with its built scene.
 
 ## Reproduce everything (`reproduce_all.sh`)
 
