@@ -23,6 +23,11 @@ FoundationPose ≈ 1–2 GB).
 git clone https://github.com/NVlabs/FoundationPose         external/FoundationPose
 git clone https://github.com/facebookresearch/sam-3d-objects external/sam-3d-objects
 
+# 0b. a FRESH FoundationPose clone needs a 2-line torch-2.9 patch BEFORE the
+#     mycuda build (full diff: VALIDATION_rigid.md, "FoundationPose mycuda torch-2.9 patch"):
+#       bundlesdf/mycuda/setup.py:  -std=c++14  ->  -std=c++17
+#       bundlesdf/mycuda/common.cu: .type()     ->  .scalar_type()   (three call sites)
+
 # 1. tell simpact where they are + where their weights live
 cp .env.example .env        # edit SIMPACT_FOUNDATIONPOSE_DIR / SIMPACT_SAM3D_DIR
 
@@ -80,14 +85,20 @@ guarded by an import check, so re-runs are cheap).
 
 ## What `scripts/setup_rigid_env.sh` does, step by step
 
-1. `uv sync --extra rigid` — core + SAM-3D **wheel** deps. Deliberately **omits
-   `mpm`**: FoundationPose pins an older `warp-lang` than the MPM extra, and rigid
-   needs no warp, so the conflict simply never arises.
+1. `uv sync --extra rigid --extra dev` — core + SAM-3D **wheel** deps, plus the
+   `dev` extras (mpm/warp, generator, arap, pytest) so this one env also runs the
+   full deformable/planning reproduce. The warp-lang version conflict feared from
+   FoundationPose is moot: FP's `requirements.txt` (which pins the old 1.0.2) is
+   never installed — only its native exts are built — and kaolin's `warp-lang`
+   requirement is unpinned, so the MPM pin `warp-lang==1.10.0` satisfies it.
 2. **git/source deps** (pinned commits): pytorch3d + nvdiffrast (FoundationPose
    renderer) + utils3d + MoGe.
 3. **FoundationPose native exts**:
-   - `mycuda` (`common`, `gridencoder`) — built in place. The clone already
-     carries the torch-2.9 migration (`-std=c++17`; `.type()→.scalar_type()`).
+   - `mycuda` (`common`, `gridencoder`) — built in place. A **fresh NVlabs clone
+     needs the 2-line torch-2.9 patch first** (`-std=c++14`→`-std=c++17` in
+     `bundlesdf/mycuda/setup.py`; `.type()`→`.scalar_type()` at the three call
+     sites in `common.cu`) — see step 0b of the TL;DR, full diff in
+     [VALIDATION_rigid.md](VALIDATION_rigid.md#foundationpose-mycuda-torch-29-patch-needed-before-phase-0).
    - `mycpp` (`cluster_poses`) — **built against the venv's pybind11 (≥ 2.12)**,
      not the system one. See gotcha #1.
 4. **kaolin** — built from `$KAOLIN_SRC` (needs `cython`; the PyPI `kaolin` is a

@@ -46,7 +46,13 @@ cp .env.example .env           # then set the vars below
 - **The full push perception** (Grounded-SAM-2 → SAM-3D → FoundationPose) has its own
   install guide: [docs/RIGID_ENV_SETUP.md](docs/RIGID_ENV_SETUP.md)
   (`bash scripts/setup_rigid_env.sh`). Not needed to run the bundled examples —
-  every trial ships with its built scene.
+  every trial ships with its built scene. The script builds **one env** that also
+  includes the `dev` extras, so the same env runs the full reproduce (rigid
+  perception + deformable/MPM + planning).
+- **After `setup_rigid_env.sh`, never run a bare `uv sync` (or `--extra dev`
+  alone)** — an exact sync prunes the rigid extras and the source-built deps
+  (sam2, pytorch3d, nvdiffrast, kaolin, the FoundationPose exts). To re-sync, use
+  `uv sync --extra rigid --extra dev`, then re-run the script (idempotent, cheap).
 
 ## Reproduce everything (`reproduce_all.sh`)
 

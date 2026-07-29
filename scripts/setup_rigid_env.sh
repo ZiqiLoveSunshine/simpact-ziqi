@@ -8,12 +8,23 @@
 # `rigid` extra in pyproject.toml; the source/git ones are pinned by commit here.
 #
 # Mesh-only: kaolin / gsplat / xformers / flash_attn / bpy are deliberately
-# skipped (the gaussian-splat + texture-bake paths). Do NOT add `--extra mpm` —
-# FoundationPose/rigid needs no warp, so the warp-lang version conflict is moot.
+# skipped (the gaussian-splat + texture-bake paths). The sync includes `dev`
+# (mpm/generator/arap + pytest) so ONE env runs both the rigid perception AND
+# the deformable/planning reproduce: the feared warp-lang conflict is moot —
+# kaolin's warp-lang requirement is unpinned (1.10.0 satisfies it) and
+# FoundationPose's requirements.txt (the old 1.0.2 pin) is never installed,
+# only its native exts are built in place.
 #
 # Idempotent: every step is guarded by an import check, so re-runs are cheap.
 set -euo pipefail
 cd "$(dirname "$0")/.."                     # repo root
+
+# Load .env (SIMPACT_* model paths) like reproduce_all.sh does; drop unresolvable
+# /path/to placeholders so the in-repo defaults below take effect instead.
+[ -f .env ] && set -a && . ./.env && set +a
+for _v in SIMPACT_SAM3D_DIR SIMPACT_FOUNDATIONPOSE_DIR SIMPACT_SAM2_CHECKPOINT SIMPACT_GROUNDED_SAM2_DIR; do
+  _p="${!_v:-}"; [ -n "$_p" ] && [ ! -e "$_p" ] && unset "$_v"
+done
 
 export CUDA_HOME=${CUDA_HOME:-/usr/local/cuda-12.8}
 export TORCH_CUDA_ARCH_LIST=${TORCH_CUDA_ARCH_LIST:-12.0}   # RTX 5090 = sm_120
@@ -21,13 +32,36 @@ export TORCH_CUDA_ARCH_LIST=${TORCH_CUDA_ARCH_LIST:-12.0}   # RTX 5090 = sm_120
 FP_DIR=${SIMPACT_FOUNDATIONPOSE_DIR:-$PWD/external/FoundationPose}
 SAM3D_DIR=${SIMPACT_SAM3D_DIR:-$PWD/external/sam-3d-objects}
 
+# Preflight: the model repos are NOT shipped with this repo (their code + weights
+# are fetched under their own licenses). Clone them first, or point the env vars
+# at existing clones. See docs/RIGID_ENV_SETUP.md ("TL;DR", step 0).
+missing=0
+if [ ! -d "$FP_DIR" ]; then
+  echo "ERROR: FoundationPose clone not found at: $FP_DIR"
+  echo "  git clone https://github.com/NVlabs/FoundationPose external/FoundationPose"
+  echo "  (+ its weights/ — see docs/RIGID_ENV_SETUP.md), or set"
+  echo "  SIMPACT_FOUNDATIONPOSE_DIR=/path/to/existing/FoundationPose in .env"
+  missing=1
+fi
+if [ ! -d "$SAM3D_DIR" ]; then
+  echo "ERROR: SAM-3D clone not found at: $SAM3D_DIR"
+  echo "  git clone https://github.com/facebookresearch/sam-3d-objects external/sam-3d-objects"
+  echo "  (+ its checkpoints/hf/ weights — see docs/RIGID_ENV_SETUP.md), or set"
+  echo "  SIMPACT_SAM3D_DIR=/path/to/existing/sam-3d-objects in .env"
+  missing=1
+fi
+[ $missing = 1 ] && exit 1
+
 py()   { uv run --no-sync python "$@"; }
 have() { py -c "import $1" 2>/dev/null; }
 log()  { printf '\n=== %s ===\n' "$1"; }
 
-# 1. Core + SAM-3D wheel deps (real2sim + sam3d). NOT mpm.
-log "uv sync --extra rigid"
-uv sync --extra rigid
+# 1. Core + SAM-3D wheel deps (real2sim + sam3d) + the dev extras (mpm/warp,
+#    generator, arap, pytest) so this one env also runs reproduce_all.sh fully.
+#    NOTE: any later bare `uv sync` prunes the source builds below — always
+#    sync with BOTH extras and re-run this script (idempotent) afterward.
+log "uv sync --extra rigid --extra dev"
+uv sync --extra rigid --extra dev
 
 # 2. Shared / git source deps (no PyPI wheel for this torch).  Pinned by commit.
 log "git/source deps (pytorch3d, nvdiffrast, utils3d, moge)"
@@ -41,8 +75,10 @@ have moge       || uv pip install --no-build-isolation \
     "git+https://github.com/microsoft/MoGe.git@a8c37341bc0325ca99b9d57981cc3bb2bd3e255b"
 
 # 3. FoundationPose native extensions.
-#  3a. mycuda (common + gridencoder): the clone already carries the torch-2.9
-#      migration (-std=c++17 in setup.py; .type()->.scalar_type() in common.cu).
+#  3a. mycuda (common + gridencoder). A FRESH NVlabs clone needs the 2-line
+#      torch-2.9 patch first (-std=c++14 -> -std=c++17 in bundlesdf/mycuda/setup.py;
+#      .type() -> .scalar_type() at the three call sites in common.cu) — see
+#      docs/VALIDATION_rigid.md "FoundationPose mycuda torch-2.9 patch".
 log "FoundationPose mycuda (build in place)"
 have common || ( cd "$FP_DIR/bundlesdf/mycuda" && py setup.py build_ext --inplace )
 #  3b. mycpp (cluster_poses): MUST build against the venv's pybind11 (>=2.12).
@@ -64,6 +100,9 @@ fi
 log "kaolin (mesh path: flexicubes)"
 KAOLIN_SRC=${KAOLIN_SRC:-$HOME/kaolin}
 if ! have kaolin; then
+    # kaolin's setup.py imports pkg_resources: uv venvs ship without setuptools,
+    # and setuptools >= 82 removed pkg_resources — pin the last version with it
+    have pkg_resources || uv pip install "setuptools<82"
     uv pip install "cython>=0.29.37"
     IGNORE_TORCH_VER=1 uv pip install --no-build-isolation "$KAOLIN_SRC"
 fi
