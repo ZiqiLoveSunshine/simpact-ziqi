@@ -31,7 +31,8 @@
 #     --overwrite-examples   write into examples/*/<trial>/runs instead of the scratch dir
 #     --tasks LIST           comma list of task cases to run (default: all four)
 #                            choices: push,rope,dough,sweep   e.g. --tasks rope,dough
-#     --quick                fewer iters/steps for a fast smoke
+#     --quick                fast smoke: fewer iters/steps AND skips the real2sim
+#                            rebuild stage (planning runs from the committed sim/)
 #     --skip-tests           skip the pytest + smoke sanity checks
 #     --skip-real2sim        skip the real2sim reconstruction stage
 #     --skip-planning        skip the closed-loop planning demos
@@ -94,7 +95,7 @@ while [ $# -gt 0 ]; do
     --tasks) TASKS="$2"; shift 2;;
     --force) FORCE=1; shift;;
     --overwrite-examples) OVERWRITE_EXAMPLES=1; shift;;
-    --quick) MAX_ITERS=1; NUM_STEPS_DOUGH=120; NUM_STEPS_SWEEP=80; shift;;
+    --quick) MAX_ITERS=1; NUM_STEPS_DOUGH=120; NUM_STEPS_SWEEP=80; DO_REAL2SIM=0; shift;;
     --skip-tests) DO_TESTS=0; shift;;
     --skip-real2sim) DO_REAL2SIM=0; shift;;
     --skip-planning) DO_PLANNING=0; shift;;
@@ -176,14 +177,21 @@ FP_DIR="${SIMPACT_FOUNDATIONPOSE_DIR:-$ROOT/external/FoundationPose}"
 # SAM2 checkpoint: env if it resolves, else the pipeline's default (matches run_rigid_pipeline.py)
 SAM2_CKPT="${SIMPACT_SAM2_CHECKPOINT:-}"
 [ -f "$SAM2_CKPT" ] || SAM2_CKPT="$HOME/sam2/checkpoints/sam2.1_hiera_large.pt"
+# Probe the PYTHON env too, not just artifacts on disk: a plain `uv sync --extra dev`
+# env has neither sam2/transformers (gsam2 extra) nor the rigid source builds — the
+# stage must SKIP with a pointer to the setup, never crash mid-run.
+HAVE_SEG_ENV=0   # segmentation deps (sam2 wheel + transformers) importable
+$PY -c "import sam2, transformers" >/dev/null 2>&1 && HAVE_SEG_ENV=1
+HAVE_RIGID_ENV=0 # + the rigid source builds (see scripts/setup_rigid_env.sh)
+[ $HAVE_SEG_ENV = 1 ] && $PY -c "import nvdiffrast, pytorch3d" >/dev/null 2>&1 && HAVE_RIGID_ENV=1
 HAVE_PERCEPTION=0
-[ $HAVE_GPU = 1 ] && [ -f "$SAM3D_DIR/checkpoints/hf/slat_decoder_mesh.ckpt" ] \
+[ $HAVE_GPU = 1 ] && [ $HAVE_RIGID_ENV = 1 ] && [ -f "$SAM3D_DIR/checkpoints/hf/slat_decoder_mesh.ckpt" ] \
   && [ -d "$FP_DIR" ] && [ -f "$SAM2_CKPT" ] && HAVE_PERCEPTION=1
 # Deformable real2sim (capture/ -> sim/) needs only segmentation + the VLM — a strict
 # subset of the push stack. The segmenter runs from the sam2 wheel + transformers
 # (a Grounded-SAM-2 repo clone is OPTIONAL); the only artifact is the SAM2 checkpoint.
 HAVE_GSAM2=0
-[ $HAVE_GPU = 1 ] && [ -f "$SAM2_CKPT" ] && HAVE_GSAM2=1
+[ $HAVE_GPU = 1 ] && [ $HAVE_SEG_ENV = 1 ] && [ -f "$SAM2_CKPT" ] && HAVE_GSAM2=1
 # resolve the auto/force/off policy into a boolean for this run
 RUN_PERCEPTION=0
 case "$DO_PERCEPTION" in
@@ -270,7 +278,7 @@ if [ $DO_REAL2SIM = 1 ]; then
   elif [ "$DO_PERCEPTION" = off ]; then
     skip_step "real2sim push (full perception)" "--skip-perception (planning uses the committed sim/)"
   else
-    skip_step "real2sim push (full perception)" "external perception models not found (SAM-3D + FoundationPose + SAM2 ckpt; see docs/RIGID_ENV_SETUP.md); planning uses the committed sim/"
+    skip_step "real2sim push (full perception)" "perception models or env not found (needs the SAM-3D/FoundationPose clones + weights AND the rigid python env — bash scripts/setup_rigid_env.sh, see docs/RIGID_ENV_SETUP.md); planning uses the committed sim/"
   fi
   # Deformable real2sim: rebuild each selected scene from its capture/ (RGB-D + EE
   # record) via build_scene — GSAM2 segmentation + VLM grounding/material-ID — and
@@ -311,7 +319,7 @@ PYEOF
     want sweep && build_one sweep sweep_real2sim 0118_sweep_0
   else
     skip_step "real2sim deformable (rebuild from capture)" \
-      "needs the SAM2 checkpoint + GPU + GOOGLE_API_KEY (planning uses the committed sim/)"
+      "needs GPU + the SAM2 checkpoint + segmentation deps (uv sync --extra gsam2) + GOOGLE_API_KEY; planning uses the committed sim/"
   fi
 else
   skip_step "real2sim" "--skip-real2sim"
