@@ -15,7 +15,10 @@ def test_import_package():
 
 def test_config_helpers():
     from simpact import get_data_dir, get_outputs_dir, get_project_root
-    assert get_project_root().name == "simpact"
+    # the checkout dir may be named anything (e.g. a release export) — identify the
+    # project root by its contents, not its name
+    root = get_project_root()
+    assert (root / "pyproject.toml").exists() and (root / "simpact").is_dir()
     assert get_data_dir() is not None
     assert get_outputs_dir() is not None
 

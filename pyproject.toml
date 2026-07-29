@@ -43,6 +43,7 @@ real2sim = [
     "dacite",
     "pymeshlab",
     "pycocotools",
+    "pyvista",   # deformable rollout renderer (executor/render_deformable.py)
 ]
 # SAM-3D (image->3D, mesh-only path) — wheel-installable deps only. Versions
 # mirror the proven `sam3d-objects` env (torch 2.9+cu128 / py3.11 / numpy 2.x).
