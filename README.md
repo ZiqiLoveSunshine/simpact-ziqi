@@ -1,6 +1,7 @@
 # SIMPACT
 
 **[SIMPACT: Simulation-Enabled Action Planning using Vision-Language Models](https://arxiv.org/abs/2512.05955)**
+
 Haowen Liu\*, Shaoxiong Yao\*, Haonan Chen, Jiawei Gao, Jiayuan Mao, Jia-Bin Huang, Yilun Du
 CVPR 2026 · \*equal contribution
 
