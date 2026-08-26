@@ -24,7 +24,7 @@ from typing import Callable, Optional, Tuple, Union
 
 import numpy as np
 
-from simpact.generator.vlm import GenerateFn, gemini_generate, generate_json, load_image
+from simpact.generator.vlm import GenerateFn, default_generate, generate_json, load_image
 from simpact.utils.config import get_project_root
 
 
@@ -179,7 +179,7 @@ class TaskVerifier:
         success_gate: Optional[SuccessGate] = None,
     ):
         self.prompt_template = prompt_template
-        self.generate_fn = generate_fn or (lambda contents: gemini_generate(contents, model_id))
+        self.generate_fn = generate_fn or (lambda contents, schema=None: default_generate(contents, model_id, schema))
         # measured goal check ANDed with the VLM's validity verdict (e.g. alignment)
         self.success_gate = success_gate
 

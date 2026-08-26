@@ -21,7 +21,7 @@ from typing import Optional
 
 import yaml
 
-from simpact.generator.vlm import GenerateFn, gemini_generate, generate_json, load_image
+from simpact.generator.vlm import GenerateFn, default_generate, generate_json, load_image
 from simpact.utils.config import get_materials_dir
 
 # Object physical properties the VLM estimates per scene.
@@ -58,7 +58,7 @@ def _render_bands(bands: dict) -> str:
 
 
 def estimate_material(image, object_name: str, material_class: str = "dough", *,
-                      generate_fn: GenerateFn = gemini_generate, retries: int = 1) -> dict:
+                      generate_fn: GenerateFn = default_generate, retries: int = 1) -> dict:
     """VLM-estimate the object's physical params (clamped to the reference bands).
 
     Returns ``{E, nu, yield_stress, density, softness, confidence, source: "vlm"}`` — the

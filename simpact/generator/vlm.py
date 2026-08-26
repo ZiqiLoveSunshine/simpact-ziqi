@@ -56,6 +56,181 @@ def gemini_generate(contents: list, model_id: Optional[str] = None,
     return resp.text
 
 
+# Fields each primitive carries on the wire (``Primitive.to_dict``), used to build
+# a decode-time JSON schema. Mirrors simpact/actions/primitives.py.
+_PRIMITIVE_FIELDS: dict[str, tuple[str, ...]] = {
+    "PUSH": ("delta_x", "delta_y"),
+    "LIFT": ("delta_z",),
+    "DESCEND": ("delta_z",),
+    "GRASP": ("grasp_width",),
+    "RELEASE": (),
+    "ROTATE": ("delta_yaw",),
+    "ROLL": ("delta_roll",),
+    "FLICK": ("delta_x", "delta_y", "delta_z"),
+    # optimizer-output ("regress") plan actions — lowercase tags, same container
+    "move": ("delta_x", "delta_y", "delta_z", "delta_roll", "delta_pitch", "delta_yaw"),
+    "gripper_control": ("width",),
+}
+
+
+def proposalset_schema(allowed_types: Optional[set] = None,
+                       max_proposals: int = 3, max_actions: int = 10) -> dict:
+    """JSON schema for a ``ProposalSet``, restricted to ``allowed_types``.
+
+    Handed to a local server as ``response_format={"type": "json_schema", ...}``, this
+    makes the task's primitive whitelist a **decoding constraint** rather than a
+    request the prompt makes politely. Small models reliably ignore the latter — they
+    reach for GRASP/RELEASE on a push task — and every such sample is a wasted rollout.
+    The constraint is the same one ``ProposalSet.validate`` already enforces after the
+    fact, so this only moves the check earlier; it never widens what is accepted.
+
+    ``max_proposals``/``max_actions`` bound the arrays. Without an upper bound a small
+    model happily emits proposals until it hits ``max_tokens`` and the JSON is truncated
+    mid-object — the cap simply matches the prompt, which asks for 3 plans.
+    """
+    types = sorted(allowed_types) if allowed_types else sorted(_PRIMITIVE_FIELDS)
+    variants = []
+    for t in types:
+        fields = _PRIMITIVE_FIELDS.get(t, ())
+        props: dict = {"type": {"const": t}}
+        props.update({f: {"type": "number"} for f in fields})
+        props["reasoning"] = {"type": "string"}
+        variants.append({"type": "object", "properties": props,
+                         "required": ["type", *fields, "reasoning"]})
+    return {
+        "type": "object",
+        "properties": {"action_proposals": {
+            "type": "array", "minItems": 1, "maxItems": max_proposals,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "description": {"type": "string"},
+                    "action_sequence": {
+                        "type": "array", "minItems": 1, "maxItems": max_actions,
+                        "items": variants[0] if len(variants) == 1 else {"anyOf": variants},
+                    },
+                },
+                "required": ["description", "action_sequence"],
+            },
+        }},
+        "required": ["action_proposals"],
+    }
+
+
+def _accepts_schema(fn) -> bool:
+    """Whether a ``GenerateFn`` can take a decode-time ``schema`` (local backends can)."""
+    import inspect
+
+    try:
+        return "schema" in inspect.signature(fn).parameters
+    except (TypeError, ValueError):
+        return False
+
+
+def _encode_image(img, fmt: str = "PNG") -> str:
+    """PIL image -> base64 string (no data-URI prefix)."""
+    import base64
+    import io
+
+    buf = io.BytesIO()
+    if fmt == "JPEG" and img.mode not in ("RGB", "L"):
+        img = img.convert("RGB")
+    img.save(buf, format=fmt)
+    return base64.b64encode(buf.getvalue()).decode("ascii")
+
+
+def openai_generate(contents: list, model_id: Optional[str] = None,
+                    base_url: Optional[str] = None, timeout_s: float = 600.0,
+                    schema: Optional[dict] = None) -> str:
+    """VLM backend for any OpenAI-compatible ``/chat/completions`` server.
+
+    This is the **local-model** path: llama.cpp's ``llama-server``, vLLM, Ollama and
+    friends all speak this wire format, so the same propose/verify/regress loop runs
+    against a self-hosted VLM with no API key. The interleaved ``contents`` list is
+    flattened into a single user message whose parts are ``text`` and ``image_url``
+    (base64 data URI) — the shared subset those servers implement.
+
+    Every simpact VLM call site parses JSON, so ``response_format={"type":
+    "json_object"}`` is requested by default: on llama.cpp that constrains decoding
+    with a JSON grammar, which is what makes small local models usable here (no
+    markdown fences, no prose preamble). Set ``SIMPACT_VLM_JSON_MODE=0`` to disable
+    it for a server that rejects the field.
+
+    Config comes from the environment (see ``.env.example``): ``SIMPACT_VLM_BASE_URL``,
+    ``SIMPACT_VLM_MODEL``, ``SIMPACT_VLM_API_KEY``, ``SIMPACT_VLM_TEMPERATURE``,
+    ``SIMPACT_VLM_MAX_TOKENS``, ``SIMPACT_VLM_IMAGE_FORMAT``.
+    """
+    import json as _json
+    import os
+    import urllib.error
+    import urllib.request
+
+    base = (base_url or os.environ.get("SIMPACT_VLM_BASE_URL")
+            or "http://127.0.0.1:8080/v1").rstrip("/")
+    model = model_id or os.environ.get("SIMPACT_VLM_MODEL") or "local-vlm"
+    fmt = os.environ.get("SIMPACT_VLM_IMAGE_FORMAT", "PNG").upper()
+    mime = "jpeg" if fmt == "JPEG" else "png"
+
+    parts: list[dict] = []
+    for c in contents:
+        if isinstance(c, str):
+            if c.strip():
+                parts.append({"type": "text", "text": c})
+        else:  # PIL image
+            parts.append({"type": "image_url", "image_url": {
+                "url": f"data:image/{mime};base64,{_encode_image(c, fmt)}"}})
+
+    payload: dict = {
+        "model": model,
+        "messages": [{"role": "user", "content": parts}],
+        "temperature": float(os.environ.get("SIMPACT_VLM_TEMPERATURE", 0.7)),
+        "max_tokens": int(os.environ.get("SIMPACT_VLM_MAX_TOKENS", 8192)),
+        "stream": False,
+    }
+    if schema is not None and os.environ.get("SIMPACT_VLM_SCHEMA_MODE", "1") != "0":
+        # strongest form: llama.cpp compiles the schema to a GBNF grammar, so the
+        # sampler cannot emit a disallowed primitive at all
+        payload["response_format"] = {"type": "json_schema", "json_schema": {
+            "name": "simpact_output", "schema": schema, "strict": True}}
+    elif os.environ.get("SIMPACT_VLM_JSON_MODE", "1") != "0":
+        payload["response_format"] = {"type": "json_object"}
+
+    req = urllib.request.Request(
+        f"{base}/chat/completions",
+        data=_json.dumps(payload).encode(),
+        headers={"Content-Type": "application/json",
+                 "Authorization": f"Bearer {os.environ.get('SIMPACT_VLM_API_KEY', 'no-key')}"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout_s) as r:
+            resp = _json.loads(r.read())
+    except urllib.error.URLError as e:
+        raise RuntimeError(
+            f"local VLM request to {base}/chat/completions failed: {e}. "
+            "Is the server running? See docs/LOCAL_VLM.md"
+        ) from e
+    return resp["choices"][0]["message"]["content"]
+
+
+def default_generate(contents: list, model_id: Optional[str] = None,
+                     schema: Optional[dict] = None) -> str:
+    """Dispatch to the backend named by ``SIMPACT_VLM_BACKEND`` (default ``gemini``).
+
+    The single seam every VLM caller (proposer, verifier, optimizer, grounding,
+    material-ID) resolves its default through, so pointing the whole closed loop at a
+    self-hosted model is one env var and no code change.
+    """
+    import os
+
+    backend = os.environ.get("SIMPACT_VLM_BACKEND", "gemini").strip().lower()
+    if backend in ("openai", "local", "llama", "llamacpp", "vllm", "ollama"):
+        return openai_generate(contents, model_id, schema=schema)
+    if backend == "gemini":
+        return gemini_generate(contents, model_id)  # schema-free; Gemini follows the prompt
+    raise ValueError(
+        f"unknown SIMPACT_VLM_BACKEND={backend!r} (expected 'gemini' or 'openai')")
+
+
 def generate_json(
     generate_fn: GenerateFn,
     contents: list,
@@ -96,10 +271,18 @@ def generate_proposalset(
     allowed_types: Optional[set] = None,
     ranges: Optional[dict] = None,
 ) -> ProposalSet:
-    """Call the VLM, parse JSON -> ProposalSet, validate; retry on bad output."""
+    """Call the VLM, parse JSON -> ProposalSet, validate; retry on bad output.
+
+    When the backend supports decode-time schemas (the local/OpenAI path) the
+    ``allowed_types`` whitelist is also compiled into a grammar, so a disallowed
+    primitive cannot be sampled in the first place. Backends without that support
+    (Gemini) are called unchanged and still validated after the fact.
+    """
+    schema = (proposalset_schema(allowed_types)
+              if allowed_types and _accepts_schema(generate_fn) else None)
     last_err: Optional[Exception] = None
     for _ in range(retries + 1):
-        text = generate_fn(contents)
+        text = generate_fn(contents, schema=schema) if schema else generate_fn(contents)
         try:
             ps = ProposalSet.from_dict(json.loads(strip_json_fences(text)))
         except Exception as e:  # malformed JSON / wrong shape

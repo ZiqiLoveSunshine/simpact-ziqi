@@ -18,7 +18,7 @@ from typing import Optional, Sequence, Union
 from scipy.spatial.transform import Rotation as R
 
 from simpact.actions import ProposalSet
-from simpact.generator.vlm import GenerateFn, gemini_generate, generate_proposalset, load_image
+from simpact.generator.vlm import GenerateFn, default_generate, generate_proposalset, load_image
 from simpact.utils.config import get_project_root
 
 
@@ -183,7 +183,7 @@ class RegressOptimizer:
     ):
         self.prompt_template = prompt_template
         self.parse_rollout = parse_rollout
-        self.generate_fn = generate_fn or (lambda contents: gemini_generate(contents, model_id))
+        self.generate_fn = generate_fn or (lambda contents, schema=None: default_generate(contents, model_id, schema))
 
     @staticmethod
     def _resolve_rollouts(rollouts) -> list[Path]:

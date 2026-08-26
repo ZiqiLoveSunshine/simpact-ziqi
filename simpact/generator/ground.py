@@ -26,7 +26,7 @@ from typing import Optional
 import numpy as np
 
 from simpact.executor.render_deformable import project
-from simpact.generator.vlm import GenerateFn, gemini_generate, generate_json, load_image
+from simpact.generator.vlm import GenerateFn, default_generate, generate_json, load_image
 from simpact.real2sim.detect_rope_endpoints import EndpointResult, detect_rope_endpoints
 
 LABELS = ("A", "B")
@@ -99,7 +99,7 @@ def annotate_tips(image, tips: np.ndarray, K: np.ndarray, cam_to_robot: np.ndarr
 
 
 def assign_endpoint_roles(annotated_image, context: str, *,
-                          generate_fn: GenerateFn = gemini_generate,
+                          generate_fn: GenerateFn = default_generate,
                           labels=LABELS, prompt_path: Path = PROMPT_PATH,
                           retries: int = 1) -> dict:
     """Ask the VLM which marker is the fixed vs free end (Phase 3).
@@ -135,7 +135,7 @@ class GroundingResult:
 
 
 def ground_rope_endpoints(scene_dir, *, cam: int = 1,
-                          generate_fn: GenerateFn = gemini_generate,
+                          generate_fn: GenerateFn = default_generate,
                           write: bool = False, save_annotated: bool = True
                           ) -> GroundingResult:
     """Full detect -> annotate -> VLM -> map pipeline for one rope scene.
